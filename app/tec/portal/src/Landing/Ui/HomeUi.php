@@ -9,4 +9,9 @@ class HomeUi extends UiBase
     {
         return $this->view('page/landing/home');
     }
+
+    public function uiShow(): Response
+    {
+        return $this->view('page/landing/ui');
+    }
 }

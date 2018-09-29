@@ -16,6 +16,7 @@ $collection
     ->site('default')
     ->access('public')
 
-    ->get('/', 'home', 'Tec\Portal\Landing\Ui\HomeUi@show');
+    ->get('/', 'home', 'Tec\Portal\Landing\Ui\HomeUi@show')
+    ->get('/ui', 'ui', 'Tec\Portal\Landing\Ui\HomeUi@uiShow');
 
 return $collection;

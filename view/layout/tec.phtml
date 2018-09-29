@@ -13,14 +13,30 @@ $isDebug = $this->config->bool('debug');
 <?php echo $this->insert('html/meta', ['localeKey', $localeKey]); ?>
 <?php $this->section('style'); ?><?php $this->stop(); ?>
 <?php if ($isDebug) { ?>
-    <link rel="stylesheet" href="<?php echo $this->staticUrl('/ui/dev/main.css'); ?>" />
+    <link rel="stylesheet" href="<?php echo $this->staticUrl('/ui/dev/css/main.css'); ?>" />
 <?php } else { ?>
-    <link rel="stylesheet" href="<?php echo $this->staticUrl('/ui/dist/main.css'); ?>" />
+    <link rel="stylesheet" href="<?php echo $this->staticUrl('/ui/dist/css/main.css'); ?>" />
 <?php } ?>
 </head>
 
 <body>
+<div class="page <?php echo $this->route->getName(); ?>">
+
+<div class="page-header-fixed primary-tint">
+<div class="ctn">
+<h1 class="title large">TecPoster</h1>
+</div><!-- .ctn -->
+</div><!-- .page-header-fiexed -->
+
+<div class="page-header"></div>
+
+<div class="page-body">
+<div class="ctn">
 <?php $this->section('main'); ?><?php $this->stop(); ?>
+</div>
+</div><!-- .page-body -->
+
+</div>
 
 <script type="text/javascript">
 window.PageConfig=<?php echo json_encode($pageConfig); ?>;
