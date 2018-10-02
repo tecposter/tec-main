@@ -17,6 +17,7 @@ $collection
     ->access('public')
 
     ->get('/', 'home', 'Tec\Portal\Landing\Ui\HomeUi@show')
+    ->get('/editor/monaco', 'monaco', 'Tec\Portal\Landing\Ui\EditorUi@monaco')
     ->get('/ui', 'ui', 'Tec\Portal\Landing\Ui\HomeUi@uiShow');
 
 return $collection;

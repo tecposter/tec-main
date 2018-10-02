@@ -1,0 +1,110 @@
+<?php $this->layout('layout/editor'); ?>
+
+<?php $this->section('head'); ?>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.14.3/min/vs/editor/editor.main.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+<style type='text/css'>
+html, body, .page {
+    height: 100%;
+}
+</style>
+<?php $this->append(); ?>
+
+<?php $this->section('main'); ?>
+<div class="editor-wrap">
+    <div class="item editor-section">
+        <div class="editor" id="monaco-editor"></div>
+    </div>
+    <div class="item preview-sectoin">
+        <div class="preview" id="editor-preview"></div>
+    </div>
+</div>
+<?php $this->append(); ?>
+
+<?php $this->section('script'); ?>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/8.4.2/markdown-it.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/languages/go.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+<script>var require = { paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.14.3/min/vs' } };</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.14.3/min/vs/loader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.14.3/min/vs/editor/editor.main.nls.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.14.3/min/vs/editor/editor.main.js"></script>
+
+<script>
+(() => {
+const defaultContent = [
+    '# Hello',
+    `\\\\( \\sigma = \\sqrt{ \\frac{1}{N} \\sum_{i=1}^N (x_i -\\mu)^2} \\\\)`
+].join('\n');
+
+const codeEditor = monaco.editor.create(document.getElementById('monaco-editor'), {
+    value: defaultContent,
+    language: 'markdown',
+    wordWrap: 'wordWrapColumn',
+    wordWrapColumn: 84,
+    wordWrapMinified: true,
+    wrappingIndent: "same"
+});
+const mdit = window.markdownit({
+  highlight: (str, lang) => {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return '<pre class="hljs"><code>' +
+               hljs.highlight(lang, str, true).value +
+               '</code></pre>';
+      } catch (__) {}
+    }
+
+    return '<pre class="hljs"><code>' + mdit.utils.escapeHtml(str) + '</code></pre>';
+  }
+});
+
+// https://docs.mathjax.org/en/latest/start.html
+MathJax.Hub.Config({
+    jax: ["input/TeX","output/HTML-CSS"],
+    displayAlign: "left"
+});
+
+const previewElem = document.getElementById('editor-preview');
+const previewWrap = previewElem.parentElement;
+const updatePreview = (val) => {
+    previewElem.innerHTML = mdit.render(val);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, previewElem]);
+};
+
+updatePreview(defaultContent);
+
+codeEditor.onDidChangeModelContent(() => {
+    updatePreview(codeEditor.getValue());
+});
+
+console.log(codeEditor.viewModel);
+
+codeEditor.onDidScrollChange((evt) => {
+    if (!evt.scrollTopChanged) {
+        return;
+    }
+
+    //const layoutInfo = codeEditor.getLayoutInfo();
+    //const lineCount = codeEditor.viewModel.lines.getViewLineCount();
+    const lineCount = codeEditor.viewModel.lines.lines.length;
+    const visibleRange = codeEditor.getVisibleRanges()[0];
+    console.log(visibleRange.startLineNumber, lineCount);
+
+    const srcMax = lineCount - (visibleRange.endLineNumber - visibleRange.startLineNumber);
+    previewWrap.scrollTop = (previewWrap.scrollHeight - previewWrap.offsetHeight) * visibleRange.startLineNumber / srcMax;
+    //const scrollTopNum  
+
+});
+
+})();
+</script>
+
+
+<?php $this->append(); ?>
