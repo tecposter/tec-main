@@ -6,16 +6,15 @@ $pageConfig = array_merge($pageConfig, [
     'localeKey' => $localeKey,
     'now' => micro_date()
 ]);
+
 $isDebug = $this->config->bool('debug');
+$cssUrl = $isDebug ? $this->staticUrl('/ui/dev/css/main.css') : $this->staticUrl('/ui/dist/css/main.css');
+$jsUrl = $isDebug ? $this->staticUrl('/main/dev/js/main.js') : $this->staticUrl('/main/dist/js/main.js');
 ?><!DOCTYPE html>
 <html lang="<?php echo $localeKey; ?>" prefix="og: http://ogp.me/ns#">
 <head>
 <?php echo $this->insert('html/meta', ['localeKey', $localeKey]); ?>
-<?php if ($isDebug) { ?>
-    <link rel="stylesheet" href="<?php echo $this->staticUrl('/ui/dev/css/main.css'); ?>" />
-<?php } else { ?>
-    <link rel="stylesheet" href="<?php echo $this->staticUrl('/ui/dist/css/main.css'); ?>" />
-<?php } ?>
+<link rel="stylesheet" href="<?php echo $cssUrl; ?>" />
 <?php $this->section('head'); ?><?php $this->stop(); ?>
 </head>
 
@@ -29,6 +28,7 @@ $isDebug = $this->config->bool('debug');
 window.PageConfig=<?php echo json_encode($pageConfig); ?>;
 </script>
 <?php $this->section('script'); ?><?php $this->stop(); ?>
+<script type="text/javascript" src="<?php echo $jsUrl; ?>"></script>
 </body>
 
 </html>

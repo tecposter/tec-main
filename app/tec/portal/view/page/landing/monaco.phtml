@@ -13,7 +13,7 @@ html, body, .page {
 <?php $this->append(); ?>
 
 <?php $this->section('main'); ?>
-<div class="editor-wrap">
+<div class="editor-wrap" gap-load="editor">
     <div class="item editor-section">
         <div class="editor" id="monaco-editor"></div>
     </div>
@@ -84,7 +84,7 @@ codeEditor.onDidChangeModelContent(() => {
     updatePreview(codeEditor.getValue());
 });
 
-console.log(codeEditor.viewModel);
+//console.log(codeEditor.viewModel);
 
 codeEditor.onDidScrollChange((evt) => {
     if (!evt.scrollTopChanged) {
@@ -95,7 +95,7 @@ codeEditor.onDidScrollChange((evt) => {
     //const lineCount = codeEditor.viewModel.lines.getViewLineCount();
     const lineCount = codeEditor.viewModel.lines.lines.length;
     const visibleRange = codeEditor.getVisibleRanges()[0];
-    console.log(visibleRange.startLineNumber, lineCount);
+    //console.log(visibleRange.startLineNumber, lineCount);
 
     const srcMax = lineCount - (visibleRange.endLineNumber - visibleRange.startLineNumber);
     previewWrap.scrollTop = (previewWrap.scrollHeight - previewWrap.offsetHeight) * visibleRange.startLineNumber / srcMax;
