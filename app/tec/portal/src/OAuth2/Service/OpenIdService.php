@@ -18,15 +18,10 @@ class OpenIdService extends ServiceBase
 
     public function accessTokenByIdToken(string $idTokenStr, string $appCode): AccessTokenDto
     {
-        $publicKey = $this->app->getConfig()->config('openId')->str('publicKey');
-
-        $idToken = (new Parser())->parse($idTokenStr);
-        $signer = new Sha256();
-        $keychain = new Keychain();
-        if (!$idToken->verify($signer, $keychain->getPublicKey($publicKey))) {
+        $idToken = $this->parseIdTokenStr($idTokenStr);
+        if (!$this->verifyIdToken($idToken)) {
             return null;
         }
-
         $appDto = $this->getAppRepo()->fetchByCode($appCode);
         if (!$appDto) {
             return null;
@@ -46,6 +41,27 @@ class OpenIdService extends ServiceBase
 
         $this->getAccessTokenRepo()->create($accessTokenDto);
         return $accessTokenDto;
+    }
+
+    public function verifyIdToken($idToken): bool
+    {
+        $publicKey = $this->app->getConfig()->config('openId')->str('publicKey');
+        $signer = new Sha256();
+        $keychain = new Keychain();
+        return $idToken->verify($signer, $keychain->getPublicKey($publicKey));
+    }
+
+    public function verifyIdTokenStr(string $idTokenStr): bool
+    {
+        //$idToken = (new Parser())->parse($idTokenStr);
+        $idToken = $this->parseIdTokenStr($idTokenStr);
+        return $this->verifyIdToken($idToken);
+    }
+
+    public function parseIdTokenStr(string $idTokenStr)
+    {
+        $idToken = (new Parser())->parse($idTokenStr);
+        return $idToken;
     }
 
     private function getAppRepo(): AppRepo
