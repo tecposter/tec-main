@@ -18,6 +18,11 @@ $collection
 
     ->get('/', 'home', 'Tec\Portal\Landing\Ui\HomeUi@show')
     ->get('/editor/monaco', 'monaco', 'Tec\Portal\Landing\Ui\EditorUi@monaco')
-    ->get('/ui', 'ui', 'Tec\Portal\Landing\Ui\HomeUi@uiShow');
+    ->get('/ui', 'ui', 'Tec\Portal\Landing\Ui\HomeUi@uiShow')
+
+    ->site('api')
+    ->access('public')
+
+    ->post('/', 'apiIndex', 'Tec\Portal\Landing\Open\IndexOpen@postOpen');
 
 return $collection;

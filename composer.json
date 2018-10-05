@@ -10,7 +10,8 @@
         }
     ],
     "require": {
-        "gap/base": "^2.0"
+        "gap/base": "^2.0",
+        "gap/open-server": "^2.1"
     },
     "require-dev": {
         "gap/util": "^2.0",
