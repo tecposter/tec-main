@@ -3,5 +3,8 @@
         <testsuite name="tec/portal">
             <directory>app/tec/portal/phpunit</directory>
         </testsuite>
+        <testsuite name="tec/article">
+            <directory>app/tec/article/phpunit</directory>
+        </testsuite>
     </testsuites>
 </phpunit>

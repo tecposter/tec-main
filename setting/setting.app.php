@@ -5,5 +5,8 @@ $collection
         "Tec\Portal" => [
             "dir" => "app/tec/portal",
         ],
+        "Tec\Article" => [
+            "dir" => "app/tec/article",
+        ],
     ]);
 return $collection;

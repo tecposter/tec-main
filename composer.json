@@ -37,12 +37,14 @@
     },
     "autoload": {
         "psr-4": {
-            "Tec\\Portal\\": "app/tec/portal/src"
+            "Tec\\Portal\\": "app/tec/portal/src",
+            "Tec\\Article\\": "app/tec/article/src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "phpunit\\Tec\\Portal\\": "app/tec/portal/phpunit"
+            "phpunit\\Tec\\Portal\\": "app/tec/portal/phpunit",
+            "phpunit\\Tec\\Article\\": "app/tec/article/phpunit"
         }
     }
 }
