@@ -4,14 +4,17 @@ $collection = new \Gap\Config\ConfigCollection();
 $collection
     ->set('site', [
         'default' => [
-            'host' => 'www.%baseHost%',
+            'baseUrl' => 'www.%baseHost%',
+            'protocol' => 'https'
         ],
         'api' => [
-            'host' => 'api.%baseHost%',
+            'baseUrl' => 'api.%baseHost%',
+            'protocol' => 'https'
         ],
         'static' => [
-            'host' => 'static.%baseHost%',
+            'baseUrl' => 'static.%baseHost%',
             'dir' => '%baseDir%/site/static',
+            'protocol' => 'https'
         ],
     ]);
 

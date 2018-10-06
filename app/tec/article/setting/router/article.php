@@ -26,6 +26,15 @@ $collection
         '/article/commit/update/{commitId:[a-zA-Z0-9-]+}',
         'updateArticleCommit',
         'Tec\Article\Article\Ui\CommitUi@update'
+    )
+
+    ->site('api')
+    ->access('accessToken')
+
+    ->postOpen(
+        '/article/commit/update',
+        'updateArticleCommit',
+        'Tec\Article\Article\Open\CommitOpen@update'
     );
 
 return $collection;

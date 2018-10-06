@@ -24,13 +24,7 @@ class AccessTokenRepo extends RepoBase
         $this->cnn->isb()
             ->insert($this->table)
             ->field(
-                'token',
-                'appId',
-                'userId',
-                'refresh',
-                'scope',
-                'created',
-                'expired'
+                ...$this->getFields()
             )->value()
                 ->addStr($accessToken->token)
                 ->addStr($accessToken->appId)
@@ -41,5 +35,29 @@ class AccessTokenRepo extends RepoBase
                 ->addDateTime($accessToken->expired)
             ->end()
             ->execute();
+    }
+
+    public function fetchByToken(string $tokenStr): ?AccessTokenDto
+    {
+        return $this->cnn->ssb()
+            ->select(...$this->getFields())
+            ->from($this->table)->end()
+            ->where()
+                ->expect('token')->equal()->str($tokenStr)
+            ->end()
+            ->fetch(AccessTokenDto::class);
+    }
+
+    private function getFields(): array
+    {
+        return [
+            'token',
+            'appId',
+            'userId',
+            'refresh',
+            'scope',
+            'created',
+            'expired'
+        ];
     }
 }

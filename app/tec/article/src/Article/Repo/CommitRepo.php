@@ -10,6 +10,19 @@ class CommitRepo extends RepoBase
     private $statusDefault = 'draft';
     private $table = 'tec_article_commit';
 
+    public function fetchById(string $commitId): ?CommitDto
+    {
+        return $this->cnn->ssb()
+            ->select(
+                ...$this->getFields()
+            )
+            ->from($this->table)->end()
+            ->where()
+                ->expect('commitId')->equal()->str($commitId)
+            ->end()
+            ->fetch(CommitDto::class);
+    }
+
     public function create(CommitDto $commitDto): void
     {
         if (!$commitDto->userId) {
@@ -34,13 +47,7 @@ class CommitRepo extends RepoBase
         $this->cnn->isb()
             ->insert($this->table)
             ->field(
-                'articleId',
-                'commitId',
-                'content',
-                'userId',
-                'status',
-                'created',
-                'changed'
+                ...$this->getFields()
             )
             ->value()
                 ->addStr($commitDto->articleId)
@@ -52,5 +59,18 @@ class CommitRepo extends RepoBase
                 ->addDateTime($commitDto->changed)
             ->end()
             ->execute();
+    }
+
+    private function getFields(): array
+    {
+        return [
+            'articleId',
+            'commitId',
+            'content',
+            'userId',
+            'status',
+            'created',
+            'changed'
+        ];
     }
 }

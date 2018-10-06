@@ -16,6 +16,25 @@ class OpenIdService extends ServiceBase
     private $appRepo;
     private $accessTokenRepo;
 
+    public function fetchAccessTokenByToken(string $token): ?AccessTokenDto
+    {
+        $cache = $this->getCache();
+        $cacheKey = $this->escape('access-token-' . $token);
+        $cachedAccessToken = $cache->get($cacheKey);
+        if ($cachedAccessToken) {
+            return $cachedAccessToken;
+        }
+
+        $savedAccessToken = $this->getAccessTokenRepo()
+            ->fetchByToken($token);
+        if ($savedAccessToken) {
+            $cache->set($cacheKey, $savedAccessToken);
+            return $savedAccessToken;
+        }
+
+        return null;
+    }
+
     public function accessTokenByIdToken(string $idTokenStr, string $appCode): AccessTokenDto
     {
         $idToken = $this->parseIdTokenStr($idTokenStr);
@@ -81,5 +100,14 @@ class OpenIdService extends ServiceBase
         }
         $this->accessTokenRepo = new AccessTokenRepo($this->getDmg());
         return $this->accessTokenRepo;
+    }
+
+    private function escape(string $key): string
+    {
+        return str_replace(
+            str_split('{}()/\@:'),
+            ['a1', 'a2', 'k1', 'k2', 's1', 's2', 'at', 'mh'],
+            $key
+        );
     }
 }
