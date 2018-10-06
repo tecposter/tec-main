@@ -10,4 +10,9 @@ class CommitService extends ServiceBase
     {
         return (new CommitRepo($this->getDmg()))->fetchById($commitId);
     }
+
+    public function update(CommitDto $commitDto): void
+    {
+        (new CommitRepo($this->getDmg()))->update($commitDto);
+    }
 }

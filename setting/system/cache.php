@@ -8,12 +8,10 @@ $collection->set('cache', [
         'database' => 1,
     ],
     'i18n' => [
-        'adapter' => 'PSR16',
         'host' => '%local.cache.host%',
         'database' => 3,
     ],
     'meta' => [
-        'adapter' => 'PSR16',
         'host' => '%local.cache.host%',
         'database' => 4,
     ],

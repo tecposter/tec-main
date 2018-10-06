@@ -13,7 +13,20 @@ $this->layout('layout/editor-monaco', [
     ]
 ]);
 
-$escapedContent = str_replace("'", "\'", $this->commitDto->content);
+//$escapedContent = str_replace("'", "\'", $this->commitDto->content);
+/*
+var_dump(htmlspecialchars($this->commitDto->content));
+exit();
+$escapedContent = str_replace(
+    ["'", "\n"],
+    ["\'", '\n'],
+    $this->commitDto->content
+);
+ */
+$escapedContent = $this->commitDto->content;
+$escapedContent = str_replace('\\', '\\\\', $escapedContent);
+$escapedContent = str_replace('\'', '\\\'', $escapedContent);
+$escapedContent = str_replace("\n", '\n', $escapedContent);
 ?>
 
 <?php /*
@@ -23,6 +36,11 @@ $escapedContent = str_replace("'", "\'", $this->commitDto->content);
  */ ?>
 
 <?php $this->section('script'); ?>
+<?php /*
+<textarea id="commit-content" style="display: none">
+<?php echo htmlspecialchars($this->commitDto->content); ?>
+</textarea>
+ */ ?>
 <script>
  window.codeEditor.setValue('<?php echo $escapedContent; ?>');
 </script>

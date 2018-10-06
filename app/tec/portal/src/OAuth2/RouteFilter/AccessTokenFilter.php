@@ -36,5 +36,7 @@ class AccessTokenFilter extends RouteFilterBase
         if ($now > $expired) {
             throw new \Exception('access token expired');
         }
+
+        $this->request->attributes->set('accessToken', $accessToken);
     }
 }

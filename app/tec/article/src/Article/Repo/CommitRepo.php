@@ -10,6 +10,23 @@ class CommitRepo extends RepoBase
     private $statusDefault = 'draft';
     private $table = 'tec_article_commit';
 
+    public function update(CommitDto $commitDto): void
+    {
+        if (!$commitDto->commitId) {
+            throw new \Exception('update commitId not found');
+        }
+
+        $commitDto->changed = new DateTime();
+        $this->cnn->usb()
+            ->update($this->table)->end()
+            ->set('content')->str($commitDto->content)
+            ->set('changed')->dateTime($commitDto->changed)
+            ->where()
+                ->expect('commitId')->equal()->str($commitDto->commitId)
+            ->end()
+            ->execute();
+    }
+
     public function fetchById(string $commitId): ?CommitDto
     {
         return $this->cnn->ssb()
