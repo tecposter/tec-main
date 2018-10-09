@@ -15,6 +15,7 @@ $jsUrl = $isDebug ? $this->staticUrl('/main/dev/js/main.js') : $this->staticUrl(
 <head>
 <?php echo $this->insert('html/meta', ['localeKey', $localeKey]); ?>
 <link rel="stylesheet" href="<?php echo $cssUrl; ?>" />
+<link rel="stylesheet" href="//at.alicdn.com/t/font_227141_j0ksjtdew7r.css" />
 
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
@@ -44,6 +45,8 @@ html, body, .page {
     </div>
 </div><!-- .editor-wrap -->
 
+<?php echo $this->section('float'); ?><?php $this->stop(); ?>
+
 </div><!-- .page -->
 
 <script type="text/javascript">
@@ -63,6 +66,9 @@ window.PageConfig=<?php echo json_encode($pageConfig); ?>;
 
 <script>
 (() => {
+let blockChanging = false;
+let contentChanged = false;
+
 const defaultContent = [
     '# TecPoster Markdown Editor'
 ].join('\n');
@@ -75,20 +81,18 @@ const codeEditor = monaco.editor.create(document.getElementById('monaco-editor')
     wordWrapMinified: true,
     wrappingIndent: "same"
 });
-window.codeEditor = codeEditor;
 
 const mdit = window.markdownit({
-  highlight: (str, lang) => {
-    if (lang && hljs.getLanguage(lang)) {
-      try {
-        return '<pre class="hljs"><code>' +
-               hljs.highlight(lang, str, true).value +
-               '</code></pre>';
-      } catch (__) {}
+    highlight: (str, lang) => {
+        if (lang && hljs.getLanguage(lang)) {
+            try {
+                return '<pre class="hljs"><code>' +
+                    hljs.highlight(lang, str, true).value +
+                    '</code></pre>';
+            } catch (__) {}
+        }
+        return '<pre class="hljs"><code>' + mdit.utils.escapeHtml(str) + '</code></pre>';
     }
-
-    return '<pre class="hljs"><code>' + mdit.utils.escapeHtml(str) + '</code></pre>';
-  }
 });
 
 // https://docs.mathjax.org/en/latest/start.html
@@ -108,11 +112,29 @@ const updatePreview = (val) => {
     previewElem.innerHTML = mdit.render(val);
     MathJax.Hub.Queue(["Typeset", MathJax.Hub, previewElem]);
 };
+/*
+const updatePageTitle = val => {
+    document.title = extractTitle(val);
+};
+ */
+const extractTitle = val => {
+    const matched = /# ([^#\n]+)/.exec(val);
+    if (matched) {
+        return matched[1];
+    }
+    return '';
+};
 
-updatePreview(defaultContent);
+//updatePreview(defaultContent);
+//updatePageTitle(defaultContent);
 
 codeEditor.onDidChangeModelContent(() => {
-    updatePreview(codeEditor.getValue());
+    const codeContent = codeEditor.getValue();
+    updatePreview(codeContent);
+    if (!blockChanging) {
+        contentChanged = true;
+    }
+    document.title = (contentChanged ? '* ' : '') + extractTitle(codeContent);
 });
 
 codeEditor.onDidScrollChange((evt) => {
@@ -126,6 +148,30 @@ codeEditor.onDidScrollChange((evt) => {
     const srcMax = lineCount - (visibleRange.endLineNumber - visibleRange.startLineNumber);
     previewWrap.scrollTop = (previewWrap.scrollHeight - previewWrap.offsetHeight) * visibleRange.startLineNumber / srcMax;
 });
+
+window.onbeforeunload = (evt) => {
+    if (!contentChanged) {
+        return;
+    }
+
+    evt.stop();
+    evt.cancel();
+    /*
+    const confirmationMessage = "Warning: Leaving this page will result in any unsaved data being lost. Are you sure you wish to continue?";
+    (evt || window.event).returnValue = confirmationMessage; //Gecko + IE
+    return confirmationMessage; //Webkit, Safari, Chrome etc.
+     */
+    (evt || window.event).returnValue = null;
+    return null;
+};
+
+window.codeEditor = codeEditor;
+window.updateSavedContent = (content) => {
+    blockChanging = true;
+    contentChanged = false;
+    codeEditor.setValue(content);
+    blockChanging = false;
+};
 
 })();
 </script>

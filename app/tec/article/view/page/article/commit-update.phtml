@@ -1,5 +1,5 @@
 <?php
-$this->layout('layout/editor-monaco', [
+$this->layout('layout/fullpage', [
     'pageConfig' => [
         'load' => 'article/commit-update',
         'commitDto' => [
@@ -7,6 +7,7 @@ $this->layout('layout/editor-monaco', [
             'commitId' => $this->commitDto->commitId,
             'userId' => $this->commitDto->userId,
             'status' => $this->commitDto->status,
+            'content' => $this->commitDto->content,
             'created' => $this->commitDto->created,
             'changed' => $this->commitDto->changed,
         ]
@@ -29,19 +30,8 @@ $escapedContent = str_replace('\'', '\\\'', $escapedContent);
 $escapedContent = str_replace("\n", '\n', $escapedContent);
 ?>
 
-<?php /*
-<?php $this->section('main'); ?>
-<?php var_dump($this->commitDto); ?>
-<?php $this->replace(); ?>
- */ ?>
-
 <?php $this->section('script'); ?>
-<?php /*
-<textarea id="commit-content" style="display: none">
-<?php echo htmlspecialchars($this->commitDto->content); ?>
-</textarea>
- */ ?>
 <script>
- window.codeEditor.setValue('<?php echo $escapedContent; ?>');
+//window.updateSavedContent('<?php echo $escapedContent; ?>');
 </script>
 <?php $this->append(); ?>

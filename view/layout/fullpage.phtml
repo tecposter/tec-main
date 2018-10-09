@@ -1,0 +1,39 @@
+<?php
+$localeKey = $this->getLocaleKey();
+
+$pageConfig = $this->pageConfig ? $this->pageConfig : [];
+$pageConfig = array_merge($pageConfig, [
+    'localeKey' => $localeKey,
+    'now' => micro_date()
+]);
+$isDebug = $this->config->bool('debug');
+$cssUrl = $isDebug ? $this->staticUrl('/ui/dev/css/main.css') : $this->staticUrl('/ui/dist/css/main.css');
+$jsUrl = $isDebug ? $this->staticUrl('/main/dev/js/main.js') : $this->staticUrl('/main/dist/js/main.js');
+?><!DOCTYPE html>
+<html lang="<?php echo $localeKey; ?>" prefix="og: http://ogp.me/ns#">
+<head>
+<?php echo $this->insert('html/meta', ['localeKey', $localeKey]); ?>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+
+<link rel="stylesheet" href="<?php echo $cssUrl; ?>" />
+<link rel="stylesheet" href="//at.alicdn.com/t/font_227141_3nadvz6oqsm.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+<?php $this->section('style'); ?><?php $this->stop(); ?>
+</head>
+
+<body>
+
+<div class="page <?php echo $this->route->getName(); ?>">
+<?php $this->section('main'); ?><?php $this->stop(); ?>
+</div>
+
+<script type="text/javascript">
+window.PageConfig=<?php echo json_encode($pageConfig); ?>;
+</script>
+<?php $this->section('script'); ?><?php $this->stop(); ?>
+<script type="text/javascript" src="<?php echo $jsUrl; ?>"></script>
+</body>
+
+</html>
+
