@@ -32,6 +32,12 @@ $collection
     ->access('accessToken')
 
     ->postOpen(
+        '/article/fetch-by-id',
+        'fetchArticleById',
+        'Tec\Article\Article\Open\ArticleOpen@fetchById'
+    )
+
+    ->postOpen(
         '/article/commit/update',
         'updateArticleCommit',
         'Tec\Article\Article\Open\CommitOpen@update'

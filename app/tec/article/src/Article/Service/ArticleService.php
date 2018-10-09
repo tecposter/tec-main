@@ -11,4 +11,9 @@ class ArticleService extends ServiceBase
         $articleRepo = new ArticleRepo($this->getDmg());
         $articleRepo->create($articleDto);
     }
+
+    public function fetchById(string $articleId): ?ArticleDto
+    {
+        return (new ArticleRepo($this->getDmg()))->fetchById($articleId);
+    }
 }

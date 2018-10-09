@@ -50,14 +50,7 @@ class ArticleRepo extends RepoBase
             $this->cnn->isb()
                 ->insert($this->table)
                 ->field(
-                    'articleId',
-                    'zcode',
-                    'commitId',
-                    'userId',
-                    'access',
-                    'status',
-                    'created',
-                    'changed'
+                    ...$this->getFields()
                 )
                 ->value()
                     ->addStr($articleDto->articleId)
@@ -76,5 +69,36 @@ class ArticleRepo extends RepoBase
         }
 
         $trans->commit();
+    }
+
+    public function fetchById(string $articleId): ?ArticleDto
+    {
+        if (empty($articleId)) {
+            return null;
+        }
+
+        return $this->cnn->ssb()
+            ->select(
+                ...$this->getFields()
+            )
+            ->from($this->table)->end()
+            ->where()
+                ->expect('articleId')->equal()->str($articleId)
+            ->end()
+            ->fetch(ArticleDto::class);
+    }
+
+    private function getFields()
+    {
+        return [
+            'articleId',
+            'zcode',
+            'commitId',
+            'userId',
+            'access',
+            'status',
+            'created',
+            'changed'
+        ];
     }
 }
