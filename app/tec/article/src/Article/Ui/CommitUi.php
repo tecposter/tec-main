@@ -15,6 +15,10 @@ class CommitUi extends UiBase
             throw new \Exception('cannot find commit');
         }
 
+        if ($commitDto->status === 'published') {
+            throw new \Exception('The commit has already be published');
+        }
+
         return $this->view('page/article/commit-update', [
             'commitDto' => $commitDto
         ]);
