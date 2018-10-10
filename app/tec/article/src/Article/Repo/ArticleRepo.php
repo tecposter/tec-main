@@ -15,6 +15,11 @@ class ArticleRepo extends RepoBase
     private $accessDefault = 'private';
     private $zcodeByteLen = 16;
 
+    public function getTable(): string
+    {
+        return $this->table;
+    }
+
     public function create(ArticleDto $articleDto): void
     {
         if (!$articleDto->userId) {
@@ -86,6 +91,22 @@ class ArticleRepo extends RepoBase
                 ->expect('articleId')->equal()->str($articleId)
             ->end()
             ->fetch(ArticleDto::class);
+    }
+
+    public function assertNotDuplicated(string $articleId, string $field, $val): void
+    {
+        $existed = $this->cnn->ssb()
+            ->select($field)
+            ->from($this->table)->end()
+            ->where()
+                ->expect($field)->equal()->str($val)
+                ->andExpect('articleId')->notEqual()->str($articleId)
+            ->end()
+            ->fetchAssoc();
+
+        if ($existed) {
+            throw new \Exception($field . ': ' . $val . ' already exists in ' . $this->table);
+        }
     }
 
     private function getFields()

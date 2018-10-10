@@ -15,4 +15,22 @@ class CommitService extends ServiceBase
     {
         (new CommitRepo($this->getDmg()))->update($commitDto);
     }
+
+    public function publish(string $userId, string $articleId, string $commitId, string $zcode, string $access): void
+    {
+        $commitRepo = new CommitRepo($this->getDmg());
+        $commitDto = $commitRepo->fetchById($commitId);
+        if ($commitDto->status === 'published') {
+            throw new \Exception('The commit has already been published');
+        }
+
+        if ($commitDto->userId !== $userId) {
+            throw new \Exception('The commit does not belong to the current user');
+        }
+        if ($commitDto->articleId !== $articleId) {
+            throw new \Exception('The commit does not belong to the current article');
+        }
+
+        $commitRepo->publish($articleId, $commitId, $zcode, $access);
+    }
 }

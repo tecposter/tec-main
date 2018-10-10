@@ -10,6 +10,33 @@ class CommitRepo extends RepoBase
     private $statusDefault = 'draft';
     private $table = 'tec_article_commit';
 
+    public function publish(string $articleId, string $commitId, string $zcode, string $access): void
+    {
+        $articleRepo = new ArticleRepo($this->dmg);
+        $articleRepo->assertNotDuplicated($articleId, 'zcode', $zcode);
+
+        $statusPublished = 'published';
+        $now = new DateTime();
+        $this->cnn->usb()
+            ->update("{$this->table} c")
+                ->leftJoin("{$articleRepo->getTable()} a")
+                    ->onCond()->expect('a.articleId')->equal()->expr('c.articleId')
+                ->endJoin()
+            ->end()
+            ->set('a.commitId')->str($commitId)
+            ->set('a.status')->str($statusPublished)
+            ->set('a.changed')->dateTime($now)
+            ->set('a.access')->str($access)
+            ->set('a.zcode')->str($zcode)
+            ->set('c.status')->str($statusPublished)
+            ->set('c.changed')->dateTime($now)
+            ->where()
+                ->expect('c.commitId')->equal()->str($commitId)
+                ->andExpect('a.articleId')->equal()->str($articleId)
+            ->end()
+            ->execute();
+    }
+
     public function update(CommitDto $commitDto): void
     {
         if (!$commitDto->commitId) {

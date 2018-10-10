@@ -18,12 +18,17 @@ $collection
     ->access('login')
 
     ->get(
-        '/article/create',
+        '/article/{zcode:[a-zA-Z0-9-]+}',
+        'article-show',
+        'Tec\Article\Article\Ui\ArticleUi@show'
+    )
+    ->get(
+        '/create-article',
         'createArticle',
         'Tec\Article\Article\Ui\ArticleUi@create'
     )
     ->get(
-        '/article/commit/update/{commitId:[a-zA-Z0-9-]+}',
+        '/update-article-commit/{commitId:[a-zA-Z0-9-]+}',
         'updateArticleCommit',
         'Tec\Article\Article\Ui\CommitUi@update'
     )
@@ -32,15 +37,20 @@ $collection
     ->access('accessToken')
 
     ->postOpen(
-        '/article/fetch-by-id',
+        '/fetch-article-by-id',
         'fetchArticleById',
         'Tec\Article\Article\Open\ArticleOpen@fetchById'
     )
 
     ->postOpen(
-        '/article/commit/update',
+        '/update-article-commit',
         'updateArticleCommit',
         'Tec\Article\Article\Open\CommitOpen@update'
-    );
+    )
+    ->postOpen(
+        '/publish-article-commit',
+        'publishArticleCommit',
+        'Tec\Article\Article\Open\CommitOpen@publish'
+    ) ;
 
 return $collection;
