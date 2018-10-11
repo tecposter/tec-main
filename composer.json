@@ -10,11 +10,11 @@
         }
     ],
     "require": {
-        "gap/base": "^2.0",
+        "gap/base": "^3.0",
         "gap/open-server": "^2.1"
     },
     "require-dev": {
-        "gap/util": "^2.0",
+        "gap/util": "^3.0",
         "phpunit/phpunit": "^7.0",
         "phpstan/phpstan": "^0.9.2",
         "squizlabs/php_codesniffer": "^3.2",
@@ -37,14 +37,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Tec\\Portal\\": "app/tec/portal/src",
-            "Tec\\Article\\": "app/tec/article/src"
+            "Tec\\": "app/tec/src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "phpunit\\Tec\\Portal\\": "app/tec/portal/phpunit",
-            "phpunit\\Tec\\Article\\": "app/tec/article/phpunit"
+            "phpunit\\Tec\\": "app/tec/phpunit"
         }
     }
 }
