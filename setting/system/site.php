@@ -3,8 +3,12 @@ $collection = new \Gap\Config\ConfigCollection();
 
 $collection
     ->set('site', [
-        'default' => [
+        'www' => [
             'baseUrl' => 'www.%baseHost%',
+            'protocol' => 'https'
+        ],
+        'i' => [
+            'baseUrl' => 'i.%baseHost%',
             'protocol' => 'https'
         ],
         'api' => [

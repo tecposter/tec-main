@@ -1,0 +1,33 @@
+<?php $this->layout('layout/tec'); ?>
+
+<?php $this->section('main'); ?>
+<div class="background-tint">
+<h1><?php echo $this->trans('reg'); ?></h1>
+<form action="<?php echo $this->routePost('reg'); ?>" method="post">
+    <label>
+        <span><?php echo $this->trans('email'); ?></span>
+        <input type="email" name="email" value="" placeholder="email" required="required">
+    </label>
+    <label>
+        <span><?php echo $this->trans('phone'); ?></span>
+        <input type="text" name="phone" value="" placeholder="phone" required="required">
+    </label>
+    <label>
+        <span><?php echo $this->trans('password'); ?></span>
+        <input type="password" name="password" value="" placeholder="password" required="required">
+    </label>
+    <label>
+        <span><?php echo $this->trans('zcode'); ?></span>
+        <input type="text" name="zcode" value="" placeholder="<?php echo $this->trans('zcode'); ?>" required="required">
+    </label>
+    <label>
+        <span><?php echo $this->trans('fullname'); ?></span>
+        <input type="text" name="fullname" value="" placeholder="fullname" required="required">
+    </label>
+    <div>
+        <button class="btn primary-tint"><?php echo $this->trans('submit'); ?></button>
+        <a href="<?php echo $this->routeGet('login'); ?>"><?php echo $this->trans('login'); ?></a> 
+    </div>
+</form>
+</div>
+<?php $this->replace(); ?>

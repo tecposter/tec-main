@@ -1,0 +1,93 @@
+<?php $this->layout('layout/tec'); ?>
+
+<?php $this->section('main'); ?>
+<div class="card">
+    <div class="divider">
+        <h2 class="title normal">Color</h2>
+    </div><!-- .divider -->
+    <div class="section">
+        <div class="palette">
+            <div class="item primary-tint light">light primary</div>
+            <div class="item primary-tint">primary</div>
+            <div class="item primary-tint dark">dark primary</div>
+            <div class="item secondary-tint light">light secondary</div>
+            <div class="item secondary-tint">secondary</div>
+            <div class="item secondary-tint dark">dark secondary</div>
+        </div>
+        <div class="palette">
+            <div class="item background-tint">background</div>
+            <div class="item surface-tint">surface</div>
+        </div>
+    </div><!-- .section -->
+</div><!-- .card -->
+
+<div class="card">
+    <div class="divider">
+        <h2 class="title normal">Title</h1>
+    </div><!-- .divider -->
+    <div class="section">
+        <div class="title xlarge">.title.xlarge</div>
+        <div class="title large">.title.large</div>
+        <div class="title normal">.title.normal</div>
+        <div class="title small">.title.small</div>
+        <div class="title tiny">.title.tiny</div>
+    </div><!-- .section -->
+</div><!-- .card -->
+
+<div class="card">
+    <div class="divider">
+        <h2 class="title normal">Button</h2>
+    </div><!-- .divider -->
+    <div class="section">
+        <table>
+            <thead>
+                <tr>
+                    <th>size / color</th>
+                    <th>normal</th>
+                    <th>disabled</th>
+                    <th>primay</th>
+                    <th>secondary</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>large</td>
+                    <td><button class="btn large normal">.large</button></td>
+                    <td><button class="btn large disabled">.large.disabled</button></td>
+                    <td><button class="btn large primary-tint">.large.primary-tint</button></td>
+                    <td><button class="btn large secondary-tint">.large.secondary-tint</button></td>
+                </tr>
+                <tr>
+                    <td>normal</td>
+                    <td><button class="btn normal">.normal</button></td>
+                    <td><button class="btn disabled">.disabled</button></td>
+                    <td><button class="btn primary-tint">.primary-tint</button></td>
+                    <td><button class="btn secondary-tint">.secondary-tint</button></td>
+                </tr>
+                <tr>
+                    <td>small</td>
+                    <td><button class="btn small normal">.small.normal</button></td>
+                    <td><button class="btn small disabled">.small.disabled</button></td>
+                    <td><button class="btn small primary-tint">.small.primary-tint</button></td>
+                    <td><button class="btn small secondary-tint">.small.secondary-tint</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div><!-- .section -->
+</div><!-- .card -->
+
+<div class="card">
+    <div class="divider">
+        <h2 class="title normal">Form</h2>
+    </div>
+    <div class="section">
+        <label>
+            <input type="text">
+        </label>
+        <label>
+            <textarea></textarea>
+        </label>
+    </div><!-- .section -->
+</div><!-- .card -->
+
+<?php $this->replace();

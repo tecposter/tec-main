@@ -1,10 +1,7 @@
 <phpunit bootstrap="vendor/autoload.php">
     <testsuites>
-        <testsuite name="tec/portal">
-            <directory>app/tec/portal/phpunit</directory>
-        </testsuite>
-        <testsuite name="tec/article">
-            <directory>app/tec/article/phpunit</directory>
+        <testsuite name="tec">
+            <directory>app/tec/phpunit</directory>
         </testsuite>
     </testsuites>
 </phpunit>

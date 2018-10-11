@@ -1,0 +1,19 @@
+<?php $this->layout('layout/tec'); ?>
+
+<?php $this->section('main'); ?>
+<div class="background-tint">
+<h1><?php echo $this->trans('login'); ?></h1>
+<form action="<?php echo $this->routePost('login'); ?>" method="post">
+    <label>
+        <input type="email" name="email" value="" placeholder="email">
+    </label>
+    <label>
+        <input type="password" name="password" value="" placeholder="password">
+    </label>
+    <div>
+        <button class="btn primary-tint"><?php echo $this->trans('submit'); ?></button>
+        <a href="<?php echo $this->routeGet('reg'); ?>"><?php echo $this->trans('reg'); ?></a> 
+    </div>
+</form>
+</div>
+<?php $this->replace(); ?>

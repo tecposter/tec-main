@@ -2,11 +2,8 @@
 $collection = new \Gap\Config\ConfigCollection();
 $collection
     ->set("app", [
-        "Tec\Portal" => [
-            "dir" => "app/tec/portal",
-        ],
-        "Tec\Article" => [
-            "dir" => "app/tec/article",
+        "Tec" => [
+            "dir" => "app/tec",
         ],
     ]);
 return $collection;
