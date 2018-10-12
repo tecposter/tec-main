@@ -14,7 +14,7 @@ $collection
 */
 $collection
     ->site('www')
-    ->access('login')
+    ->filter('login')
 
     ->get('/article-create', 'article-create', 'Tec\Article\Ui\ArticleUi@create');
 

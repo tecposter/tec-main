@@ -2,8 +2,8 @@
 $collection = new \Gap\Config\ConfigCollection();
 
 $collection->set('routeFilter', [
-    //'Tec\User\RouteFilter\LoginFilter',
-    //'Tec\OAuth2\RouteFilter\AccessTokenFilter'
+    'login' => 'Tec\User\RouteFilter\LoginFilter',
+    //'accessToken' => 'Tec\OAuth2\RouteFilter\AccessTokenFilter'
 ]);
 
 return $collection;

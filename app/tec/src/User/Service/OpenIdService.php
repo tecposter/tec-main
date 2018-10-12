@@ -2,6 +2,8 @@
 namespace Tec\User\Service;
 
 use Lcobucci\JWT\Builder;
+use Lcobucci\JWT\Token;
+use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Keychain;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 
@@ -15,15 +17,19 @@ use Gap\Dto\DateTime;
 
 class OpenIdService extends ServiceBase
 {
-    public function createIdTokenByUser(UserDto $userDto)
+    public function createIdTokenByUser(UserDto $userDto): Token
     {
         $config = $this->app->getConfig();
         $openIdConfig = $config->config('openId');
         $issuer = $openIdConfig->str('issuer');
-        $audience = $config->str('baseHost');
-        $subject = 'tecposter|' . $userDto->userId;
+
+        $baseHost = $config->str('baseHost');
+        $audience = $baseHost;
+        $subject = "$baseHost|{$userDto->userId}";
+
         $privateKey = $openIdConfig->str('privateKey');
         $expired = (new DateTime())->add($this->getIdTokenTtl());
+
         // https://github.com/lcobucci/jwt/blob/3.2/README.md
         $signer = new Sha256();
         $keychain = new Keychain();
@@ -36,6 +42,19 @@ class OpenIdService extends ServiceBase
             ->sign($signer, $keychain->getPrivateKey($privateKey))
             ->getToken();
         return $token;
+    }
+
+    public function strToToken(string $tokenStr): Token
+    {
+        return (new Parser())->parse($tokenStr);
+    }
+
+    public function verifyToken(Token $token): bool
+    {
+        $publicKey = $this->app->getConfig()->config('openId')->str('publicKey');
+        $signer = new Sha256();
+        $keychain = new Keychain();
+        return $token->verify($signer, $keychain->getPublicKey($publicKey));
     }
 
     private function getIdTokenTtl(): \DateInterval
