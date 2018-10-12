@@ -12,5 +12,10 @@ $collection
     ->getOpen('/get-open/patter', 'routeName', 'Tec\Article\Open\Entity@getOpen')
     ->postOpen('/post-open/patter', 'routeName', 'Tec\Article\Open\Entity@postOpen');
 */
+$collection
+    ->site('www')
+    ->access('login')
+
+    ->get('/article-create', 'article-create', 'Tec\Article\Ui\ArticleUi@create');
 
 return $collection;
