@@ -6,7 +6,7 @@ use Gap\Http\RedirectResponse;
 use Gap\Http\ResponseInterface;
 use Gap\Http\Cookie;
 
-use Tec\User\Service\OpenIdService;
+use Tec\User\Service\IdentityService;
 use Tec\User\Service\UserService;
 use Tec\User\Dto\RegDto;
 
@@ -31,7 +31,13 @@ class UserUi extends UiBase
         $domain = '.' . $this->config->str('baseHost');
         $secure = true;
         $httpOnly = true;
-        $response->headers->clearCookie('idToken', '/', '.' . $this->config->str('baseHost'), true, true);
+        $response->headers->clearCookie(
+            'idToken',
+            $path,
+            $domain,
+            $secure,
+            $httpOnly
+        );
 
         return $response;
     }
@@ -55,8 +61,8 @@ class UserUi extends UiBase
         }
 
         // https://symfony.com/blog/new-in-symfony-3-3-cookie-improvements
-        $openIdService = new OpenIdService($this->app);
-        $idToken = $openIdService->createIdTokenByUser($userDto);
+        $identityService = new IdentityService($this->app);
+        $idToken = $identityService->createIdTokenByUser($userDto);
 
         $homeUrl = $this->getRouteUrlBuilder()->routeGet('home');
         $response = new RedirectResponse($homeUrl);

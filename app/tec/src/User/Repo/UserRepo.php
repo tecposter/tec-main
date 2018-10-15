@@ -42,7 +42,6 @@ class UserRepo extends RepoBase
         $phone = trim($reg->phone);
         $fullname = trim($reg->fullname);
         $zcode = trim($reg->zcode);
-        $userId = uuid();
 
         (new ValidPassword())->assert($password);
         (new ValidEmail())->assert($email);
@@ -52,7 +51,6 @@ class UserRepo extends RepoBase
             ->setMax(64)
             ->assert($zcode);
 
-        $this->assertNotExists('userId', $userId);
         $this->assertNotExists('email', $email);
         $this->assertNotExists('phone', $phone);
         $this->assertNotExists('zcode', $zcode);
@@ -64,7 +62,6 @@ class UserRepo extends RepoBase
         $this->cnn->isb()
             ->insert($this->table)
             ->field(
-                'userId',
                 'email',
                 'phone',
                 'zcode',
@@ -74,7 +71,6 @@ class UserRepo extends RepoBase
                 'changed'
             )
             ->value()
-                ->addStr($userId)
                 ->addStr($email)
                 ->addStr($phone)
                 ->addStr($zcode)

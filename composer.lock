@@ -177,16 +177,16 @@
         },
         {
             "name": "gap/base",
-            "version": "v3.1.0",
+            "version": "v3.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/gaptree/gap-php-base.git",
-                "reference": "66c8751cfd86184a500e25aedba13ecca31b9c64"
+                "reference": "a88b29bd23b4f3826035a2604d644184aeeff371"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gaptree/gap-php-base/zipball/66c8751cfd86184a500e25aedba13ecca31b9c64",
-                "reference": "66c8751cfd86184a500e25aedba13ecca31b9c64",
+                "url": "https://api.github.com/repos/gaptree/gap-php-base/zipball/a88b29bd23b4f3826035a2604d644184aeeff371",
+                "reference": "a88b29bd23b4f3826035a2604d644184aeeff371",
                 "shasum": ""
             },
             "require": {
@@ -196,8 +196,8 @@
                 "gap/db": "^2.0",
                 "gap/dto": "^1.0",
                 "gap/http": "^2.0",
-                "gap/i18n": "^2.0",
-                "gap/meta": "^2.0",
+                "gap/i18n": "^3.0",
+                "gap/meta": "^3.0",
                 "gap/routing": "^2.0",
                 "gap/security": "^1.0",
                 "php": ">=7.1.0"
@@ -226,7 +226,7 @@
             "keywords": [
                 "gap"
             ],
-            "time": "2018-10-12T06:23:23+00:00"
+            "time": "2018-10-13T15:04:48+00:00"
         },
         {
             "name": "gap/cache",
@@ -305,16 +305,16 @@
         },
         {
             "name": "gap/db",
-            "version": "v2.1.2",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/gaptree/gap-php-db.git",
-                "reference": "25cda5698afdc077764d067e771bb1d5179330aa"
+                "reference": "a8603e575c40799bb1b84eef817e26b6d59e0db0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gaptree/gap-php-db/zipball/25cda5698afdc077764d067e771bb1d5179330aa",
-                "reference": "25cda5698afdc077764d067e771bb1d5179330aa",
+                "url": "https://api.github.com/repos/gaptree/gap-php-db/zipball/a8603e575c40799bb1b84eef817e26b6d59e0db0",
+                "reference": "a8603e575c40799bb1b84eef817e26b6d59e0db0",
                 "shasum": ""
             },
             "require": {
@@ -345,7 +345,7 @@
             "keywords": [
                 "gap"
             ],
-            "time": "2018-08-29T05:30:33+00:00"
+            "time": "2018-10-13T14:49:46+00:00"
         },
         {
             "name": "gap/dto",
@@ -423,16 +423,16 @@
         },
         {
             "name": "gap/i18n",
-            "version": "v2.0.6",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/gaptree/gap-php-i18n.git",
-                "reference": "0cf7d699d2aa09bedaaee24f496dd8c49a92dadb"
+                "reference": "51e6802dddc2310215fd9bc63b02e03e889b38cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gaptree/gap-php-i18n/zipball/0cf7d699d2aa09bedaaee24f496dd8c49a92dadb",
-                "reference": "0cf7d699d2aa09bedaaee24f496dd8c49a92dadb",
+                "url": "https://api.github.com/repos/gaptree/gap-php-i18n/zipball/51e6802dddc2310215fd9bc63b02e03e889b38cc",
+                "reference": "51e6802dddc2310215fd9bc63b02e03e889b38cc",
                 "shasum": ""
             },
             "require": {
@@ -457,20 +457,20 @@
             "keywords": [
                 "gap"
             ],
-            "time": "2018-04-23T11:02:28+00:00"
+            "time": "2018-10-13T14:57:57+00:00"
         },
         {
             "name": "gap/meta",
-            "version": "v2.0.9",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/gaptree/gap-php-meta.git",
-                "reference": "f102ec0283c30fd981c3bd8fd4c2171b0a19fc6e"
+                "reference": "524524445af27bf879e9e356ed5a0ee481407e43"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gaptree/gap-php-meta/zipball/f102ec0283c30fd981c3bd8fd4c2171b0a19fc6e",
-                "reference": "f102ec0283c30fd981c3bd8fd4c2171b0a19fc6e",
+                "url": "https://api.github.com/repos/gaptree/gap-php-meta/zipball/524524445af27bf879e9e356ed5a0ee481407e43",
+                "reference": "524524445af27bf879e9e356ed5a0ee481407e43",
                 "shasum": ""
             },
             "require": {
@@ -495,7 +495,7 @@
             "keywords": [
                 "gap"
             ],
-            "time": "2018-04-23T11:01:45+00:00"
+            "time": "2018-10-13T14:55:18+00:00"
         },
         {
             "name": "gap/open-dto",
@@ -1456,16 +1456,16 @@
         },
         {
             "name": "gap/util",
-            "version": "v3.1.0",
+            "version": "v3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/gaptree/gap-php-util.git",
-                "reference": "5141b16cd6a540f555bf9f761974a20c124baedb"
+                "reference": "1c9750baa39b288e3f10778d2480959ced859d4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gaptree/gap-php-util/zipball/5141b16cd6a540f555bf9f761974a20c124baedb",
-                "reference": "5141b16cd6a540f555bf9f761974a20c124baedb",
+                "url": "https://api.github.com/repos/gaptree/gap-php-util/zipball/1c9750baa39b288e3f10778d2480959ced859d4e",
+                "reference": "1c9750baa39b288e3f10778d2480959ced859d4e",
                 "shasum": ""
             },
             "require": {
@@ -1494,7 +1494,7 @@
             "keywords": [
                 "gap"
             ],
-            "time": "2018-10-12T06:12:08+00:00"
+            "time": "2018-10-12T07:34:52+00:00"
         },
         {
             "name": "jean85/pretty-package-versions",
