@@ -28,8 +28,7 @@ class ArticleUi extends UiBase
 
         $commit  = (new ArticleService($this->getApp()))->createCommit($userId);
         $updateCommitUrl = $this->getRouteUrlBuilder()
-            ->routeGet('article-commit-update', ['code' => $commit->getCode()]);
-
+            ->routeGet('article-commit-update', ['code' => $commit->code]);
         return new RedirectResponse($updateCommitUrl);
     }
 }

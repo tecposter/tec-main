@@ -1,6 +1,8 @@
 <?php
 namespace Tec\Article\Dto;
 
+use Gap\Dto\Bin;
+
 class CommitDto extends DtoBase
 {
     public $commitId;
@@ -12,8 +14,8 @@ class CommitDto extends DtoBase
     public $created;
     public $changed;
 
-    public function getCode(): string
+    public function init(): void
     {
-        return bin2hex($this->code);
+        $this->code = new Bin();
     }
 }

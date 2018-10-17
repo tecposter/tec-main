@@ -34,7 +34,7 @@ class CommitRepo extends RepoBase
             ->value()
                 ->addInt($commit->userId)
                 ->addInt($commit->articleId)
-                ->addStr($commit->code)
+                ->addStr($commit->code->getBin())
                 ->addStr($commit->content)
                 ->addStr($commit->status)
                 ->addDateTime($commit->created)

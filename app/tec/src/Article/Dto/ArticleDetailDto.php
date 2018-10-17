@@ -14,6 +14,13 @@ class ArticleDetailDto extends DtoBase
     public $status;
     public $created;
     public $changed;
+
+    public function init(): void
+    {
+        $this->created = new DateTime();
+        $this->expired = new DateTime();
+    }
+
     public function getTitle(): string
     {
         $matched = preg_match('/# ([^#\n]+)/', $this->content, $matches);
