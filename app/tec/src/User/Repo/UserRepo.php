@@ -24,7 +24,7 @@ class UserRepo extends RepoBase
                 'userId',
                 'email',
                 'phone',
-                'zcode',
+                'code',
                 'fullname',
                 'passhash'
             )
@@ -41,7 +41,7 @@ class UserRepo extends RepoBase
         $email = trim($reg->email);
         $phone = trim($reg->phone);
         $fullname = trim($reg->fullname);
-        $zcode = trim($reg->zcode);
+        $code = trim($reg->code);
 
         (new ValidPassword())->assert($password);
         (new ValidEmail())->assert($email);
@@ -49,11 +49,11 @@ class UserRepo extends RepoBase
         (new ValidWord())
             ->setMin(5)
             ->setMax(64)
-            ->assert($zcode);
+            ->assert($code);
 
         $this->assertNotExists('email', $email);
         $this->assertNotExists('phone', $phone);
-        $this->assertNotExists('zcode', $zcode);
+        $this->assertNotExists('code', $code);
         $this->assertNotExists('fullname', $fullname);
 
         $now = new DateTime();
@@ -64,7 +64,7 @@ class UserRepo extends RepoBase
             ->field(
                 'email',
                 'phone',
-                'zcode',
+                'code',
                 'fullname',
                 'passhash',
                 'created',
@@ -73,7 +73,7 @@ class UserRepo extends RepoBase
             ->value()
                 ->addStr($email)
                 ->addStr($phone)
-                ->addStr($zcode)
+                ->addStr($code)
                 ->addStr($fullname)
                 ->addStr($passhash)
                 ->addDateTime($now)

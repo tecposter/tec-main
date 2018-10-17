@@ -177,16 +177,16 @@
         },
         {
             "name": "gap/base",
-            "version": "v3.3.0",
+            "version": "v3.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/gaptree/gap-php-base.git",
-                "reference": "a88b29bd23b4f3826035a2604d644184aeeff371"
+                "reference": "d3878dee018ac8085452f4447ebd7f7371a0e328"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gaptree/gap-php-base/zipball/a88b29bd23b4f3826035a2604d644184aeeff371",
-                "reference": "a88b29bd23b4f3826035a2604d644184aeeff371",
+                "url": "https://api.github.com/repos/gaptree/gap-php-base/zipball/d3878dee018ac8085452f4447ebd7f7371a0e328",
+                "reference": "d3878dee018ac8085452f4447ebd7f7371a0e328",
                 "shasum": ""
             },
             "require": {
@@ -226,7 +226,7 @@
             "keywords": [
                 "gap"
             ],
-            "time": "2018-10-13T15:04:48+00:00"
+            "time": "2018-10-16T11:45:43+00:00"
         },
         {
             "name": "gap/cache",
@@ -349,16 +349,16 @@
         },
         {
             "name": "gap/dto",
-            "version": "v1.0.4",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/gaptree/gap-php-dto.git",
-                "reference": "7bf926594b7f79a0781bf3f388bbe454066f600f"
+                "reference": "c898db3e8e9b5001938df63b60aa7b47ca6dc2e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gaptree/gap-php-dto/zipball/7bf926594b7f79a0781bf3f388bbe454066f600f",
-                "reference": "7bf926594b7f79a0781bf3f388bbe454066f600f",
+                "url": "https://api.github.com/repos/gaptree/gap-php-dto/zipball/c898db3e8e9b5001938df63b60aa7b47ca6dc2e5",
+                "reference": "c898db3e8e9b5001938df63b60aa7b47ca6dc2e5",
                 "shasum": ""
             },
             "require": {
@@ -386,7 +386,7 @@
                 "dto",
                 "gap"
             ],
-            "time": "2018-03-16T06:30:16+00:00"
+            "time": "2018-10-16T11:44:37+00:00"
         },
         {
             "name": "gap/http",
@@ -2705,16 +2705,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "6.0.8",
+            "version": "6.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "848f78b3309780fef7ec8c4666b7ab4e6b09b22f"
+                "reference": "0685fb6a43aed1b2e09804d1aaf17144c82861f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/848f78b3309780fef7ec8c4666b7ab4e6b09b22f",
-                "reference": "848f78b3309780fef7ec8c4666b7ab4e6b09b22f",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/0685fb6a43aed1b2e09804d1aaf17144c82861f8",
+                "reference": "0685fb6a43aed1b2e09804d1aaf17144c82861f8",
                 "shasum": ""
             },
             "require": {
@@ -2738,7 +2738,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "6.0-dev"
+                    "dev-master": "6.1-dev"
                 }
             },
             "autoload": {
@@ -2764,7 +2764,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-10-04T03:41:23+00:00"
+            "time": "2018-10-16T05:37:37+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",

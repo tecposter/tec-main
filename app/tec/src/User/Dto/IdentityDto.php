@@ -4,7 +4,7 @@ namespace Tec\User\Dto;
 class IdentityDto extends DtoBase
 {
     public $identityId;
-    public $zcode;
+    public $code;
     public $data;
     public $created;
     public $expired;

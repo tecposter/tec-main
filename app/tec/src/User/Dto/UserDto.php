@@ -8,7 +8,7 @@ class UserDto extends DtoBase
     public $userId;
     public $email;
     public $phone;
-    public $zcode;
+    public $code;
     public $fullname;
     public $passhash;
 

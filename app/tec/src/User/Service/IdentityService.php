@@ -31,7 +31,7 @@ class IdentityService extends ServiceBase
         $baseHost = $config->str('baseHost');
         $audience = $baseHost;
 
-        $uniqId = bin2hex($identityDto->zcode);
+        $uniqId = bin2hex($identityDto->code);
         $subject = "$baseHost|$uniqId";
 
         $privateKey = $identityConfig->str('privateKey');
@@ -58,13 +58,25 @@ class IdentityService extends ServiceBase
         return $token;
     }
 
+    public function fetchUserByCode(string $code): ?UserDto
+    {
+        $identityRepo = new IdentityRepo($this->getDmg());
+        $dataStr = $identityRepo->fetchDataByCode($code);
+        if (!$dataStr) {
+            return null;
+        }
+
+        $userDto = new UserDto(json_decode($dataStr, true));
+        return $userDto;
+    }
+
     private function createIdentityDto(UserDto $userDto): IdentityDto
     {
         $identityRepo = new IdentityRepo($this->getDmg());
         $identityDto = new IdentityDto([
             'data' => json_encode([
                 'userId' => $userDto->userId,
-                'zcode' => $userDto->zcode,
+                'code' => $userDto->code,
                 'fullname' => $userDto->fullname,
                 'phone' => $userDto->phone,
                 'email' => $userDto->email

@@ -8,28 +8,40 @@ class LoginFilter extends RouteFilterBase
     public function filter(): void
     {
         $session = $this->request->getSession();
-        if ($session->get('identityZcodeStr')) {
+        if ($session->get('userId')) {
             return;
         }
 
         $cookies = $this->request->cookies;
         $idTokenStr = $cookies->get('idToken');
         if (!$idTokenStr) {
-            throw new \Exception('not-login');
+            $this->throwExeption('not-login');
         }
 
-        $openIdService = new IdentityService($this->getApp());
-        $idToken = $openIdService->strToToken($idTokenStr);
-        if (!$openIdService->verifyToken($idToken)) {
-            throw new \Exception('verify idToken failed');
+        $identityService = new IdentityService($this->getApp());
+        $idTokenDto = $identityService->strToToken($idTokenStr);
+
+        if ($idTokenDto->isExpired()) {
+            $this->throwExeption('idToken expired');
         }
 
-        $sub = $idToken->getClaim('sub');
+        if (!$identityService->verifyToken($idTokenDto)) {
+            $this->throwExeption('verify idToken failed');
+        }
+
+        $sub = $idTokenDto->getClaim('sub');
         $arr = explode('|', $sub);
         if (!isset($arr[1])) {
-            throw new \Exception('sub format is not correct');
+            $this->throwExeption('sub format is not correct');
         }
-        $identityZcodeStr = $arr[1];
-        $session->set('identityZcodeStr', $identityZcodeStr);
+
+        $codeStr = $arr[1];
+        $userDto = $identityService->fetchUserByCode($codeStr);
+        $session->set('userId', $userDto->userId);
+    }
+
+    private function throwExeption(string $msg): void
+    {
+        throw new \Exception($msg);
     }
 }
