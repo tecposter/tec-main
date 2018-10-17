@@ -2,6 +2,8 @@
 namespace Tec\Article\Ui;
 
 use Gap\Http\Response;
+use Gap\Http\RedirectResponse;
+
 use Tec\Article\Service\ArticleService;
 
 class ArticleUi extends UiBase
@@ -17,8 +19,17 @@ class ArticleUi extends UiBase
         ]);
     }
 
-    public function create(): Response
+    public function create(): RedirectResponse
     {
-        return new Response('show');
+        $userId = $this->request->getSession()->get('userId');
+        if (!$userId) {
+            throw new \Exception('not login');
+        }
+
+        $commit  = (new ArticleService($this->getApp()))->createCommit($userId);
+        $updateCommitUrl = $this->getRouteUrlBuilder()
+            ->routeGet('article-commit-update', ['code' => $commit->getCode()]);
+
+        return new RedirectResponse($updateCommitUrl);
     }
 }

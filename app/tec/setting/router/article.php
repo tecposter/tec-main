@@ -18,6 +18,7 @@ $collection
     ->get('/article/{code:[a-z0-9-]+}', 'article-show', 'Tec\Article\Ui\ArticleUi@show')
 
     ->filter('login')
-    ->get('/article-create', 'article-create', 'Tec\Article\Ui\ArticleUi@create');
+    ->get('/article-create', 'article-create', 'Tec\Article\Ui\ArticleUi@create')
+    ->get('/article-commit-update/{code:[a-z0-9-]+}', 'article-commit-update', 'Tec\Article\Ui\CommitUi@update');
 
 return $collection;
