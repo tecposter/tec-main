@@ -1,0 +1,16 @@
+<?php
+$this->layout('layout/fullpage', [
+    'metaTitleVars' => [$this->articleDetail->getTitle()],
+    'pageConfig' => [
+        'load' => 'article/show'
+    ]
+]);
+?>
+
+<?php $this->section('main'); ?>
+<div class="ctn">
+    <div class="article-detail">
+    <?php echo htmlspecialchars($this->articleDetail->content); ?>
+    </div>
+</div>
+<?php $this->append(); ?>

@@ -14,8 +14,10 @@ $collection
 */
 $collection
     ->site('www')
-    ->filter('login')
+    ->noFilter()
+    ->get('/article/{code:[a-z0-9-]+}', 'article-show', 'Tec\Article\Ui\ArticleUi@show')
 
+    ->filter('login')
     ->get('/article-create', 'article-create', 'Tec\Article\Ui\ArticleUi@create');
 
 return $collection;
