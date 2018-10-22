@@ -13,14 +13,14 @@ class ArticleRepo extends RepoBase
     const COMMIT_TABLE = 'tec_article_commit';
     const USER_TABLE = 'tec_user';
 
-    const ARTICLE_STATUS_DEFAULT = 'normal';
-    const COMMIT_STATUS_DEFAULT = 'draft';
-    const ACCESS_DEFAULT = 'private';
+    //const ARTICLE_STATUS_DEFAULT = 'normal';
+    //const COMMIT_STATUS_DEFAULT = 'draft';
+    //const ACCESS_DEFAULT = 'private';
 
-    public function fetchDetail(string $code): ?DetailDto
+    public function fetchDetail(string $slug): ?DetailDto
     {
-        if (empty($code)) {
-            throw new \Exception('code cannot be empty');
+        if (empty($slug)) {
+            throw new \Exception('slug cannot be empty');
         }
 
         $articleTable = self::ARTICLE_TABLE;
@@ -29,8 +29,8 @@ class ArticleRepo extends RepoBase
 
         return $this->cnn->ssb()
             ->select(
-                'a.code articleCode',
-                'u.code userCode',
+                'a.slug slug',
+                'u.slug userSlug',
                 'u.fullname userFullname',
                 'c.content',
                 'a.access',
@@ -49,9 +49,38 @@ class ArticleRepo extends RepoBase
                 ->endJoin()
             ->end()
             ->where()
-                ->expect('a.code')->equal()->str($code)
+                ->expect('a.slug')->equal()->str($slug)
             ->end()
             ->fetch(DetailDto::class);
+    }
+
+    public function fetchCommit(int $userId, string $codeHex): ?CommitDto
+    {
+        $articleTable = self::ARTICLE_TABLE;
+        $commitTable = self::COMMIT_TABLE;
+
+        $code = hex2bin($codeHex);
+
+        return $this->cnn->ssb()
+            ->select(
+                'c.code',
+                'a.slug',
+                'c.content',
+                'c.status',
+                'c.created',
+                'c.changed'
+            )
+            ->from("{$commitTable} c")
+                ->leftJoin("$articleTable a")
+                ->onCond()
+                    ->expect('c.articleId')->equal()->expr('a.articleId')
+                ->endJoin()
+            ->end()
+            ->where()
+                ->expect('c.code')->equal()->str($code)
+                ->andExpect('c.userId')->equal()->int($userId)
+            ->end()
+            ->fetch(CommitDto::class);
     }
 
     public function reqCreating(int $userId): string
@@ -64,17 +93,17 @@ class ArticleRepo extends RepoBase
         $trans->begin();
         try {
             $articleTable = self::ARTICLE_TABLE;
-            $articleCode = bin2hex($this->randomBin());
+            $slug = bin2hex($this->randomBin());
             $emptyCommitId = 0;
-            $articleAccess = self::ACCESS_DEFAULT;
-            $articleStatus = self::ARTICLE_STATUS_DEFAULT;
+            $articleAccess = DetailDto::ACCESS_DEFAULT;
+            $articleStatus = DetailDto::STATUS_DEFAULT;
             $now = new DateTime();
 
             $this->cnn->isb()
                 ->insert($articleTable)
                 ->field(...$this->getArticleFields())
                 ->value()
-                    ->addStr($articleCode)
+                    ->addStr($slug)
                     ->addInt($emptyCommitId)
                     ->addInt($userId)
                     ->addStr($articleAccess)
@@ -86,16 +115,16 @@ class ArticleRepo extends RepoBase
             $articleId = $this->cnn->lastInsertId();
 
             $commitTable = self::COMMIT_TABLE;
-            $commitCode = $this->randomBin();
+            $code = $this->randomBin();
             $content = '';
-            $commitStatus = self::COMMIT_STATUS_DEFAULT;
+            $commitStatus = CommitDto::STATUS_DEFAULT;
             $this->cnn->isb()
                 ->insert($commitTable)
                 ->field(...$this->getCommitFields())
                 ->value()
                     ->addInt($userId)
                     ->addInt($articleId)
-                    ->addStr($commitCode)
+                    ->addStr($code)
                     ->addStr($content)
                     ->addStr($commitStatus)
                     ->addDateTime($now)
@@ -109,7 +138,7 @@ class ArticleRepo extends RepoBase
             throw $e;
         }
         $trans->commit();
-        return bin2hex($commitCode);
+        return bin2hex($code);
     }
 
     private function randomBin(): string
@@ -122,7 +151,7 @@ class ArticleRepo extends RepoBase
     private function getArticleFields(): array
     {
         return [
-            'code',
+            'slug',
             'commitId',
             'userId',
             'access',

@@ -8,30 +8,30 @@ use Tec\Article\Repo\ArticleRepo;
 
 class ArticleService extends ServiceBase
 {
-    public function fetchDetail(string $articleCode): ?DetailDto
+    public function fetchDetail(string $slug): ?DetailDto
     {
-        return (new ArticleRepo($this->getDmg()))->fetchDetail($articleCode);
+        return $this->getArticleRepo()->fetchDetail($slug);
     }
 
-    public function reqCreating(string $userId): string
+    public function reqCreating(int $userId): string
     {
-        return (new ArticleRepo($this->getDmg()))
-            ->reqCreating($userId);
+        return $this->getArticleRepo()->reqCreating($userId);
     }
 
-    public function reqUpdating(int $userId, string $articleCode): string
-    {
-    }
-
-    public function fetchCommit(string $commitCode): CommitDto
+    public function reqUpdating(int $userId, string $slug): string
     {
     }
 
-    public function updateContent(string $commitCode, string $content): void
+    public function fetchCommit(int $userId, string $code): ?CommitDto
+    {
+        return $this->getArticleRepo()->fetchCommit($userId, $code);
+    }
+
+    public function updateCommitContent(int $userId, string $code, string $content): void
     {
     }
 
-    public function publish(string $commitCode, string $articleCode): void
+    public function publish(int $userId, string $code, string $slug): void
     {
     }
 

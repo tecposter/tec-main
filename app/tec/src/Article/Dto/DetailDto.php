@@ -5,6 +5,9 @@ use Gap\Dto\DateTime;
 
 class DetailDto extends DtoBase
 {
+    const STATUS_DEFAULT = 'normal';
+    const ACCESS_DEFAULT = 'private';
+
     public $articleCode;
     public $userCode;
     public $userFullname;

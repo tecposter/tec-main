@@ -6,10 +6,11 @@ use Gap\Dto\DateTime;
 
 class CommitDto extends DtoBase
 {
-    public $commitId;
-    public $userId;
-    public $articleId;
+    const STATUS_DEFAULT = 'draft';
+    const STATUS_PUBLISHED = 'published';
+
     public $code;
+    public $slug;
     public $content;
     public $status;
     public $created;
