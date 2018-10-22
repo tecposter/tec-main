@@ -1,12 +1,11 @@
 <?php
 namespace Tec\Article\Dto;
 
-class ArticleDetailDto extends DtoBase
+use Gap\Dto\DateTime;
+
+class DetailDto extends DtoBase
 {
-    public $articleId;
-    public $code;
-    public $commitId;
-    public $userId;
+    public $articleCode;
     public $userCode;
     public $userFullname;
     public $content;
@@ -18,7 +17,7 @@ class ArticleDetailDto extends DtoBase
     public function init(): void
     {
         $this->created = new DateTime();
-        $this->expired = new DateTime();
+        $this->changed = new DateTime();
     }
 
     public function getTitle(): string

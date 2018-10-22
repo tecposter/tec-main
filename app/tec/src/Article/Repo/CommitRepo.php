@@ -47,6 +47,17 @@ class CommitRepo extends RepoBase
         return $commit;
     }
 
+    public function fetchByCode(string $codeHex): CommitDto
+    {
+        return $this->cnn->ssb()
+            ->select('commitId', ...$this->getFields())
+            ->from($this->table)->end()
+            ->where()
+                ->expect('code')->equal()->str(hex2bin($codeHex))
+            ->end()
+            ->fetch(CommitDto::class);
+    }
+
     private function createCode(): string
     {
         //$timeHex = dechex((microtime(true) * 10 ** 4) & 0xffffff);

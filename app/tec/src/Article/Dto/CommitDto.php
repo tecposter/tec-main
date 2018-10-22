@@ -2,6 +2,7 @@
 namespace Tec\Article\Dto;
 
 use Gap\Dto\Bin;
+use Gap\Dto\DateTime;
 
 class CommitDto extends DtoBase
 {
@@ -17,5 +18,7 @@ class CommitDto extends DtoBase
     public function init(): void
     {
         $this->code = new Bin();
+        $this->created = new DateTime();
+        $this->changed = new DateTime();
     }
 }

@@ -10,25 +10,33 @@ class ArticleUi extends UiBase
 {
     public function show(): Response
     {
-        $code = $this->getParam('code');
-        $articleDetail = (new ArticleService($this->getApp()))
-            ->fetchDetailByCode($code);
+        $articleCode = $this->getParam('articleCode');
+        $detail = (new ArticleService($this->getApp()))
+            ->fetchDetail($articleCode);
 
         return $this->view('page/article/show', [
-            'articleDetail' => $articleDetail
+            'detail' => $detail
         ]);
     }
 
-    public function create(): RedirectResponse
+    public function reqCreating(): RedirectResponse
     {
         $userId = $this->request->getSession()->get('userId');
         if (!$userId) {
             throw new \Exception('not login');
         }
 
-        $commit  = (new ArticleService($this->getApp()))->createCommit($userId);
-        $updateCommitUrl = $this->getRouteUrlBuilder()
-            ->routeGet('article-commit-update', ['code' => $commit->code]);
-        return new RedirectResponse($updateCommitUrl);
+        $article  = (new ArticleService($this->getApp()))->create($userId);
+        $updateUrl = $this->getRouteUrlBuilder()
+            ->routeGet('article-update', ['code' => $article->code]);
+        return new RedirectResponse($updateUrl);
+    }
+
+    public function reqUpdating(): RedirectResponse
+    {
+    }
+
+    public function commit(): Response
+    {
     }
 }

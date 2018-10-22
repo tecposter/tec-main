@@ -1,7 +1,7 @@
 <?php
 namespace Tec\Article\Repo;
 
-use Tec\Article\Dto\ArticleDetailDto;
+use Tec\Article\Dto\DetailDto;
 use Tec\Article\Dto\CommitDto;
 
 use Gap\Dto\DateTime;
@@ -13,7 +13,7 @@ class ArticleRepo extends RepoBase
     private $statusDefault = 'normal';
     private $accessDefault = 'private';
 
-    public function fetchDetailByCode(string $code): ?ArticleDetailDto
+    public function fetchDetail(string $code): ?DetailDto
     {
         if (empty($code)) {
             throw new \Exception('code cannot be empty');
@@ -25,10 +25,7 @@ class ArticleRepo extends RepoBase
 
         return $this->cnn->ssb()
             ->select(
-                'a.articleId',
-                'a.code',
-                'a.commitId',
-                'a.userId',
+                'a.code articleCode',
                 'u.code userCode',
                 'u.fullname userFullname',
                 'c.content',
@@ -50,7 +47,7 @@ class ArticleRepo extends RepoBase
             ->where()
                 ->expect('a.code')->equal()->str($code)
             ->end()
-            ->fetch(ArticleDetailDto::class);
+            ->fetch(DetailDto::class);
     }
 
     public function createCommit(int $userId): CommitDto

@@ -15,10 +15,20 @@ $collection
 $collection
     ->site('www')
     ->noFilter()
-    ->get('/article/{code:[a-z0-9-]+}', 'article-show', 'Tec\Article\Ui\ArticleUi@show')
+    ->get('/article/{articleCode:[a-z0-9-]+}', 'article-show', 'Tec\Article\Ui\ArticleUi@show')
 
     ->filter('login')
-    ->get('/article-create', 'article-create', 'Tec\Article\Ui\ArticleUi@create')
-    ->get('/article-commit-update/{code:[a-z0-9-]+}', 'article-commit-update', 'Tec\Article\Ui\CommitUi@update');
+    ->get('/article-req-creating', 'article-req-creating', 'Tec\Article\Ui\ArticleUi@reqCreating')
+    ->get(
+        '/article-req-updating/{articleCode:[a-z0-9-]+}',
+        'article-req-updating',
+        'Tec\Article\Ui\ArticleUi@reqUpdating'
+    )
+    ->get(
+        '/article-commit/{commitCode:[a-z0-9-]+}',
+        'article-commit',
+        'Tec\Article\Ui\ArticleUi@commit'
+    );
+
 
 return $collection;

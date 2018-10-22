@@ -1,0 +1,12 @@
+<?php
+$this->layout('layout/fullpage', [
+    'pageConfig' => [
+        'load' => 'article/commit-update',
+        'commit' => [
+            'code' => $this->commit->code,
+            'content' => $this->commit->content,
+            'status' => $this->commit->status
+        ]
+    ]
+]);
+?>
