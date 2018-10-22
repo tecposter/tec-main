@@ -26,9 +26,9 @@ class ArticleUi extends UiBase
             throw new \Exception('not login');
         }
 
-        $article  = (new ArticleService($this->getApp()))->create($userId);
+        $commitCode  = (new ArticleService($this->getApp()))->reqCreating($userId);
         $updateUrl = $this->getRouteUrlBuilder()
-            ->routeGet('article-update', ['code' => $article->code]);
+            ->routeGet('article-update-commit', ['commitCode' => $commitCode]);
         return new RedirectResponse($updateUrl);
     }
 

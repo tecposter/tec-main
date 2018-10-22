@@ -9,9 +9,13 @@ use Gap\Dto\TimeUniq;
 
 class ArticleRepo extends RepoBase
 {
-    private $table = 'tec_article';
-    private $statusDefault = 'normal';
-    private $accessDefault = 'private';
+    const ARTICLE_TABLE = 'tec_article';
+    const COMMIT_TABLE = 'tec_article_commit';
+    const USER_TABLE = 'tec_user';
+
+    const ARTICLE_STATUS_DEFAULT = 'normal';
+    const COMMIT_STATUS_DEFAULT = 'draft';
+    const ACCESS_DEFAULT = 'private';
 
     public function fetchDetail(string $code): ?DetailDto
     {
@@ -19,9 +23,9 @@ class ArticleRepo extends RepoBase
             throw new \Exception('code cannot be empty');
         }
 
-        $articleTable = $this->table;
-        $commitTable = 'tec_article_commit';
-        $userTable = 'tec_user';
+        $articleTable = self::ARTICLE_TABLE;
+        $commitTable = self::COMMIT_TABLE;
+        $userTable = self::USER_TABLE;
 
         return $this->cnn->ssb()
             ->select(
@@ -50,7 +54,7 @@ class ArticleRepo extends RepoBase
             ->fetch(DetailDto::class);
     }
 
-    public function createCommit(int $userId): CommitDto
+    public function reqCreating(int $userId): string
     {
         if ($userId <= 0) {
             throw new \Exception('error userId');
@@ -58,54 +62,83 @@ class ArticleRepo extends RepoBase
 
         $trans = $this->cnn->trans();
         $trans->begin();
-
-        //$code = (new TimeUniq())->getBin() . random_bytes(1);
-        $code = $this->createCode();
-        $emptyCommitId = 0;
-        $access = $this->accessDefault;
-        $status = $this->statusDefault;
-        $created = new DateTime();
-        $changed = new DateTime();
-
         try {
+            $articleTable = self::ARTICLE_TABLE;
+            $articleCode = bin2hex($this->randomBin());
+            $emptyCommitId = 0;
+            $articleAccess = self::ACCESS_DEFAULT;
+            $articleStatus = self::ARTICLE_STATUS_DEFAULT;
+            $now = new DateTime();
+
             $this->cnn->isb()
-                ->insert($this->table)
-                ->field(...$this->getFields())
+                ->insert($articleTable)
+                ->field(...$this->getArticleFields())
                 ->value()
-                    ->addStr($code)
+                    ->addStr($articleCode)
                     ->addInt($emptyCommitId)
                     ->addInt($userId)
-                    ->addStr($access)
-                    ->addStr($status)
-                    ->addDateTime($created)
-                    ->addDateTime($changed)
+                    ->addStr($articleAccess)
+                    ->addStr($articleStatus)
+                    ->addDateTime($now)
+                    ->addDateTime($now)
+                ->end()
+                ->execute();
+            $articleId = $this->cnn->lastInsertId();
+
+            $commitTable = self::COMMIT_TABLE;
+            $commitCode = $this->randomBin();
+            $content = '';
+            $commitStatus = self::COMMIT_STATUS_DEFAULT;
+            $this->cnn->isb()
+                ->insert($commitTable)
+                ->field(...$this->getCommitFields())
+                ->value()
+                    ->addInt($userId)
+                    ->addInt($articleId)
+                    ->addStr($commitCode)
+                    ->addStr($content)
+                    ->addStr($commitStatus)
+                    ->addDateTime($now)
+                    ->addDateTime($now)
                 ->end()
                 ->execute();
 
-            $articleId = $this->cnn->lastInsertId();
-            $commit = (new CommitRepo($this->dmg))->create($userId, $articleId);
+            //$commit = (new CommitRepo($this->dmg))->create($userId, $articleId);
         } catch (\Exception $e) {
             $trans->rollback();
             throw $e;
         }
-
         $trans->commit();
-        return $commit;
+        return bin2hex($commitCode);
     }
 
-    private function createCode(): string
+    private function randomBin(): string
     {
         $timeHex = dechex(microtime(true) * 10 ** 4);
-        return $timeHex . bin2hex(random_bytes(2));
+        $paded = str_pad($timeHex, 12, '0', STR_PAD_LEFT);
+        return hex2bin($paded) . random_bytes(2);
     }
 
-    private function getFields(): array
+    private function getArticleFields(): array
     {
         return [
             'code',
             'commitId',
             'userId',
             'access',
+            'status',
+            'created',
+            'changed'
+        ];
+    }
+
+    private function getCommitFields(): array
+    {
+        return [
+            'userId',
+            'articleId',
+            'code',
+            'content',
             'status',
             'created',
             'changed'

@@ -15,7 +15,8 @@ class ArticleService extends ServiceBase
 
     public function reqCreating(string $userId): string
     {
-        return (new ArticleRepo($this->getDmg()))->createCommit($userId);
+        return (new ArticleRepo($this->getDmg()))
+            ->reqCreating($userId);
     }
 
     public function reqUpdating(int $userId, string $articleCode): string

@@ -25,9 +25,9 @@ $collection
         'Tec\Article\Ui\ArticleUi@reqUpdating'
     )
     ->get(
-        '/article-commit/{commitCode:[a-z0-9-]+}',
-        'article-commit',
-        'Tec\Article\Ui\ArticleUi@commit'
+        '/article-update-commit/{commitCode:[a-z0-9-]+}',
+        'article-update-commit',
+        'Tec\Article\Ui\ArticleUi@updateCommit'
     );
 
 
