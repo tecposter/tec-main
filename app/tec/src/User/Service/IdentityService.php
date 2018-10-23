@@ -46,8 +46,9 @@ class IdentityService extends ServiceBase
         return $this->getAccessTokenRepo()->create($userId, $app->appId, $this->getTtl());
     }
 
-    public function fetchData(string $subject): array
+    public function fetchData(string $code): array
     {
+        /*
         $subjectArr = explode('|', $subject);
         if ($subjectArr[0] !== $this->getBaseHost()) {
             throw new \Exception('unkown vendor');
@@ -56,6 +57,7 @@ class IdentityService extends ServiceBase
             throw new \Exception('subject error format: ' . $subject);
         }
         $code = $subjectArr[1];
+         */
         return $this->getIdentityRepo()->fetchData($code);
     }
 

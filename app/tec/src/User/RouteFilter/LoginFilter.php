@@ -2,6 +2,7 @@
 namespace Tec\User\RouteFilter;
 
 use Tec\User\Service\IdentityService;
+use Tec\User\Service\IdTokenService;
 
 class LoginFilter extends RouteFilterBase
 {
@@ -18,30 +19,32 @@ class LoginFilter extends RouteFilterBase
             $this->throwExeption('not-login');
         }
 
-        $identityService = new IdentityService($this->getApp());
-        $idTokenDto = $identityService->strToToken($idTokenStr);
-
-        if ($idTokenDto->isExpired()) {
+        $idTokenService = $this->getIdTokenService();
+        $idToken = $idTokenService->strToToken($idTokenStr);
+        if ($idToken->isExpired()) {
             $this->throwExeption('idToken expired');
         }
-
-        if (!$identityService->verifyToken($idTokenDto)) {
+        if (!$idTokenService->verifyToken($idToken)) {
             $this->throwExeption('verify idToken failed');
         }
 
-        $sub = $idTokenDto->getClaim('sub');
-        $arr = explode('|', $sub);
-        if (!isset($arr[1])) {
-            $this->throwExeption('sub format is not correct');
-        }
-
-        $codeStr = $arr[1];
-        $userDto = $identityService->fetchUserByCode($codeStr);
-        $session->set('userId', $userDto->userId);
+        $identityCode = $idTokenService->extractIdentityCode($idToken);
+        $data = $this->getIdentityService()->fetchData($identityCode);
+        $session->set('userId', $data['userId']);
     }
 
     private function throwExeption(string $msg): void
     {
         throw new \Exception($msg);
+    }
+
+    private function getIdentityService(): IdentityService
+    {
+        return new IdentityService($this->getApp());
+    }
+
+    private function getIdTokenService(): IdTokenService
+    {
+        return new IdTokenService($this->getApp());
     }
 }
