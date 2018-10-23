@@ -1,17 +1,14 @@
 <?php
 namespace Tec\User\Service;
 
-use Lcobucci\JWT\Builder;
-use Lcobucci\JWT\Token;
-use Lcobucci\JWT\Parser;
-use Lcobucci\JWT\Signer\Keychain;
-use Lcobucci\JWT\Signer\Rsa\Sha256;
-
 use Gap\Dto\DateTime;
 
 use Tec\User\Dto\UserDto;
 use Tec\User\Dto\IdentityDto;
+
+use Tec\User\Repo\AppRepo;
 use Tec\User\Repo\IdentityRepo;
+use Tec\User\Repo\AccessTokenRepo;
 
 /*
  openssl genrsa -out private.pem 2048
@@ -20,89 +17,71 @@ use Tec\User\Repo\IdentityRepo;
 
 class IdentityService extends ServiceBase
 {
-    public function createIdTokenByUser(UserDto $userDto): Token
+    public function access(int $userId): ?AccessToken
     {
-        $identityDto = $this->createIdentityDto($userDto);
-
-        $config = $this->app->getConfig();
-        $identityConfig = $config->config('identity');
-        $issuer = $identityConfig->str('issuer');
-
-        $baseHost = $config->str('baseHost');
-        $audience = $baseHost;
-
-        $uniqId = bin2hex($identityDto->code);
-        $subject = "$baseHost|$uniqId";
-
-        $privateKey = $identityConfig->str('privateKey');
-        $issued = new DateTime();
-        $expired = (new DateTime())->add($this->getIdTokenTtl());
-
-        // https://github.com/lcobucci/jwt/blob/3.2/README.md
-        // https://auth0.com/docs/tokens/id-token
         /*
-         * sub:     The unique identifier of the user.
-         *          This is guaranteed to be unique per user and will be in the format
-         *          (identity provider)|(unique id in the provider), such as github|1234567890.
-         */
-        $signer = new Sha256();
-        $keychain = new Keychain();
-        $token = (new Builder())
-            ->setIssuer($issuer) // Configures the issuer (iss claim)
-            ->setSubject($subject)
-            ->setAudience($audience)
-            ->setIssuedAt($issued->getTimestamp()) // Configures the time that the token was issue (iat claim)
-            ->setExpiration($expired->getTimestamp()) // Configures the expiration time of the token (exp claim)
-            ->sign($signer, $keychain->getPrivateKey($privateKey))
-            ->getToken();
-        return $token;
-    }
-
-    public function fetchUserByCode(string $code): ?UserDto
-    {
-        $identityRepo = new IdentityRepo($this->getDmg());
-        $dataStr = $identityRepo->fetchDataByCode($code);
-        if (!$dataStr) {
-            return null;
+        $idToken = $this->strToToken($idTokenStr);
+        if (!$idToken) {
+            throw new \Exception('idToken error format: ' . $idTokenStr);
         }
-
-        $userDto = new UserDto(json_decode($dataStr, true));
-        return $userDto;
+        if ($idToken->isExpired()) {
+            throw new \Exception('idToken expired');
+        }
+        if (!$this->verifyToken($idToken)) {
+            throw new \Exception('verify token failed');
+        }
+        $data = $this->fetchData($idToken->getClaim('sub'));
+        if (!$data) {
+            throw new \Exception('Cannot fetch data by ' . $idToken->getClaim('sub'));
+        }
+        $userId = $data['userId'] ?? null;
+        if (!$userId) {
+            throw new \Exception('Cannot find userId in identity data');
+        }
+         */
+        if ($userId <= 0) {
+            throw new \Exception('userId error format: ' . $userId);
+        }
+        $app = $this->getAppRepo()->fetch($this->getAppKey());
+        return $this->getAccessTokenRepo()->create($userId, $app->appId, $this->getTtl());
     }
 
-    private function createIdentityDto(UserDto $userDto): IdentityDto
+    public function fetchData(string $subject): array
     {
-        $identityRepo = new IdentityRepo($this->getDmg());
-        $identityDto = new IdentityDto([
-            'data' => json_encode([
-                'userId' => $userDto->userId,
-                'code' => $userDto->code,
-                'fullname' => $userDto->fullname,
-                'phone' => $userDto->phone,
-                'email' => $userDto->email
-            ]),
-            'created' => new DateTime(),
-            'expired' => (new DateTime())->add($this->getIdTokenTtl())
-        ]);
-        $identityRepo->create($identityDto);
-        return $identityDto;
+        $subjectArr = explode('|', $subject);
+        if ($subjectArr[0] !== $this->getBaseHost()) {
+            throw new \Exception('unkown vendor');
+        }
+        if (!isset($subjectArr[1])) {
+            throw new \Exception('subject error format: ' . $subject);
+        }
+        $code = $subjectArr[1];
+        return $this->getIdentityRepo()->fetchData($code);
     }
 
-    public function strToToken(string $tokenStr): Token
+
+    public function createIdentity(array $data): IdentityDto
     {
-        return (new Parser())->parse($tokenStr);
+        return $this->getIdentityRepo()->create($data, $this->getTtl());
     }
 
-    public function verifyToken(Token $token): bool
+    private function getAppKey(): string
     {
-        $publicKey = $this->app->getConfig()->config('identity')->str('publicKey');
-        $signer = new Sha256();
-        $keychain = new Keychain();
-        return $token->verify($signer, $keychain->getPublicKey($publicKey));
+        return $this->app->getConfig()->config('open')->str('appKey');
     }
 
-    private function getIdTokenTtl(): \DateInterval
+    private function getAppRepo(): AppRepo
     {
-        return new \DateInterval('P1M');
+        return new AppRepo($this->getDmg());
+    }
+
+    private function getAccessTokenRepo(): AccessTokenRepo
+    {
+        return new AccessTokenRepo($this->getDmg());
+    }
+
+    private function getIdentityRepo(): IdentityRepo
+    {
+        return new IdentityRepo($this->getDmg());
     }
 }

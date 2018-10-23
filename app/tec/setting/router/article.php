@@ -28,6 +28,15 @@ $collection
         '/article-update-commit/{code:[a-z0-9-]+}',
         'article-update-commit',
         'Tec\Article\Ui\ArticleUi@updateCommit'
+    )
+
+    ->site('api')
+    ->filter('accessToken')
+
+    ->postOpen(
+        '/article-update-commit',
+        'article-update-commit',
+        'Tec\Article\Open\ArticleOpen@updateCommit'
     );
 
 

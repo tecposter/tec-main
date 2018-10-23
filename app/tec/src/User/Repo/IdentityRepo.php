@@ -7,17 +7,14 @@ class IdentityRepo extends RepoBase
 {
     private $table = 'open_identity';
 
-    public function create(IdentityDto $identity): void
+    public function create(array $data, \DateInterval $ttl): IdentityDto
     {
-        $codeByteLen = 16;
-        $identity->code = uniqBin($codeByteLen);
-        if (empty($identity->data)) {
-            throw new \Exception('data cannot be empty');
-        }
-
-        if ((!$identity->created) || (!$identity->expired)) {
-            throw new \Exception('require both created and expired');
-        }
+        $identity = new IdentityDto([
+            'code' => $this->createCode(),
+            'data' => $data,
+            'created' => new DateTime(),
+            'expired' => (new DateTime())->add($ttl)
+        ]);
 
         $this->cnn->isb()
             ->insert($this->table)
@@ -35,9 +32,10 @@ class IdentityRepo extends RepoBase
             ->end()
             ->execute();
         $identity->identityId = $this->cnn->lastInsertId();
+        return $identity;
     }
 
-    public function fetchDataByCode(string $code): string
+    public function fetchData(string $code): array
     {
         $res = $this->cnn->ssb()
             ->select('data')
@@ -47,10 +45,19 @@ class IdentityRepo extends RepoBase
             ->end()
             ->fetchAssoc();
 
-        if ($res) {
-            return $res['data'];
+        if (!$res) {
+            return [];
         }
 
-        return '';
+        $arr = json_decode($res['data'], true);
+        if ($arr === null) {
+            throw new \Exception('json decode failed');
+        }
+        return $arr;
+    }
+
+    private function createCode(): string
+    {
+        return m4sBin() . random_bytes(2);
     }
 }

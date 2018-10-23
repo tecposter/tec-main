@@ -2,6 +2,8 @@
 namespace Tec\User\Dto;
 
 use Gap\Dto\DateTime;
+use Gap\Dto\Bin;
+use Gap\Dto\Json;
 
 class IdentityDto extends DtoBase
 {
@@ -15,5 +17,7 @@ class IdentityDto extends DtoBase
     {
         $this->created = new DateTime();
         $this->expired = new DateTime();
+        $this->code = new Bin();
+        $this->data = new Json();
     }
 }

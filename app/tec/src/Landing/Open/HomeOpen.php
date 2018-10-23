@@ -26,7 +26,6 @@ class HomeOpen extends OpenBase
         }
 
         $res = [
-            'appId' => $openConfig->str('appId'),
             'appName' => $openConfig->str('appName'),
             'appDesc' => $openConfig->str('appDesc'),
             'created' => $openConfig->str('created'),

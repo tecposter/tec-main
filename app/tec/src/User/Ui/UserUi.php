@@ -90,7 +90,7 @@ class UserUi extends UiBase
         $regDto = new RegDto([
             'email' => $post->get('email'),
             'phone' => $post->get('phone'),
-            'zcode' => $post->get('zcode'),
+            'slug' => $post->get('slug'),
             'fullname' => $post->get('fullname'),
             'password' => $post->get('password'),
         ]);
