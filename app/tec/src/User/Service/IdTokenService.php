@@ -7,9 +7,11 @@ use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Keychain;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 
+use Gap\Dto\DateTime;
+
 class IdTokenService extends ServiceBase
 {
-    public function createToken(string $identityCode): Token
+    public function create(string $identityCode, \DateInterval $ttl): Token
     {
         $issuer = $this->getIssuer();
         $baseHost = $this->getBaseHost();
@@ -17,7 +19,7 @@ class IdTokenService extends ServiceBase
         $subject = "$baseHost|$identityCode";
         $privateKey = $this->getPrivateKey();
         $issued = new DateTime();
-        $expired = (new DateTime())->add($this->getTtl());
+        $expired = (new DateTime())->add($ttl);
 
         // https://github.com/lcobucci/jwt/blob/3.2/README.md
         // https://auth0.com/docs/tokens/id-token
@@ -86,8 +88,10 @@ class IdTokenService extends ServiceBase
         return $this->app->getConfig()->config('identity')->str('publicKey');
     }
 
+    /*
     private function getTtl(): \DateInterval
     {
         return new \DateInterval('P1M');
     }
+     */
 }

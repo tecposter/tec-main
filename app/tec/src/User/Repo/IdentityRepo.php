@@ -2,6 +2,7 @@
 namespace Tec\User\Repo;
 
 use Tec\User\Dto\IdentityDto;
+use Gap\Dto\DateTime;
 
 class IdentityRepo extends RepoBase
 {
@@ -25,7 +26,7 @@ class IdentityRepo extends RepoBase
                 'expired'
             )
             ->value()
-                ->addStr($identity->code)
+                ->addStr($identity->code->getBin())
                 ->addStr($identity->data)
                 ->addDateTime($identity->created)
                 ->addDateTime($identity->expired)
@@ -58,6 +59,7 @@ class IdentityRepo extends RepoBase
 
     private function createCode(): string
     {
-        return m4sBin() . random_bytes(2);
+        //return m4sBin() . random_bytes(2);
+        return m4sBin() . 'id';
     }
 }

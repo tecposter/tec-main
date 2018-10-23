@@ -60,9 +60,9 @@ class IdentityService extends ServiceBase
     }
 
 
-    public function createIdentity(array $data): IdentityDto
+    public function create(array $data, \DateInterval $ttl): IdentityDto
     {
-        return $this->getIdentityRepo()->create($data, $this->getTtl());
+        return $this->getIdentityRepo()->create($data, $ttl);
     }
 
     private function getAppKey(): string

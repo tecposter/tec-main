@@ -349,16 +349,16 @@
         },
         {
             "name": "gap/dto",
-            "version": "v1.3.0",
+            "version": "v1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/gaptree/gap-php-dto.git",
-                "reference": "f543b9584a0b9d42893baf39be2d3070a67c12d3"
+                "reference": "d147440b3673010018b7a54473e6404faf1c3052"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gaptree/gap-php-dto/zipball/f543b9584a0b9d42893baf39be2d3070a67c12d3",
-                "reference": "f543b9584a0b9d42893baf39be2d3070a67c12d3",
+                "url": "https://api.github.com/repos/gaptree/gap-php-dto/zipball/d147440b3673010018b7a54473e6404faf1c3052",
+                "reference": "d147440b3673010018b7a54473e6404faf1c3052",
                 "shasum": ""
             },
             "require": {
@@ -389,7 +389,7 @@
                 "dto",
                 "gap"
             ],
-            "time": "2018-10-23T06:13:00+00:00"
+            "time": "2018-10-23T11:16:06+00:00"
         },
         {
             "name": "gap/http",

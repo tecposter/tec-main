@@ -7,6 +7,7 @@ use Gap\Http\ResponseInterface;
 use Gap\Http\Cookie;
 
 use Tec\User\Service\IdentityService;
+use Tec\User\Service\IdTokenService;
 use Tec\User\Service\UserService;
 use Tec\User\Dto\RegDto;
 
@@ -55,15 +56,24 @@ class UserUi extends UiBase
 
         $userService = new UserService($this->app);
 
-        $userDto = $userService->fetchByEmail($email);
-        if (!$userDto->verifyPassword($password)) {
+        $user = $userService->fetchByEmail($email);
+        if (!$user->verifyPassword($password)) {
             throw new \Exception('login failed');
         }
 
         // https://symfony.com/blog/new-in-symfony-3-3-cookie-improvements
-        $identityService = new IdentityService($this->app);
-        $idToken = $identityService->createIdTokenByUser($userDto);
+        //$identityService = new IdentityService($this->app);
+        //$idToken = $identityService->createIdTokenByUser($user);
 
+        $ttl = new \DateInterval('P1M');
+        $identity = $this->getIdentityService()->create(
+            [
+                'userId' => $user->userId,
+                'fullname' => $user->fullname
+            ],
+            $ttl
+        );
+        $idToken = $this->getIdTokenService()->create($identity->code, $ttl);
         $homeUrl = $this->getRouteUrlBuilder()->routeGet('home');
         $response = new RedirectResponse($homeUrl);
 
@@ -99,5 +109,15 @@ class UserUi extends UiBase
         $userService->reg($regDto);
         $loginUrl = $this->getRouteUrlBuilder()->routeGet('login');
         return new RedirectResponse($loginUrl);
+    }
+
+    private function getIdTokenService(): IdTokenService
+    {
+        return new IdTokenService($this->getApp());
+    }
+
+    private function getIdentityService(): IdentityService
+    {
+        return new IdentityService($this->getApp());
     }
 }
