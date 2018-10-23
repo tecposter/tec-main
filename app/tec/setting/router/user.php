@@ -8,9 +8,9 @@ $collection
     ->post('/login', 'login', 'Tec\User\Ui\UserUi@loginPost')
     ->get('/reg', 'reg', 'Tec\User\Ui\UserUi@reg')
     ->post('/reg', 'reg', 'Tec\User\Ui\UserUi@regPost')
-
-    ->filter('login')
     ->get('/logout', 'logout', 'Tec\User\Ui\UserUi@logout')
+
+    //->filter('login')
 
     ->site('api')
     ->noFilter()

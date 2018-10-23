@@ -60,6 +60,6 @@ class IdentityRepo extends RepoBase
     private function createCode(): string
     {
         //return m4sBin() . random_bytes(2);
-        return m4sBin() . 'id';
+        return m4sBin();
     }
 }
