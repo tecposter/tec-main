@@ -6,6 +6,8 @@ use Gap\Dto\DateTime;
 
 class AccessTokenDto extends DtoBase
 {
+    public $userId;
+    public $appId;
     public $token;
     public $refresh;
     public $scope;
@@ -18,5 +20,11 @@ class AccessTokenDto extends DtoBase
         $this->refresh = new Bin();
         $this->created = new DateTime();
         $this->expired = new DateTime();
+    }
+
+    public function isExpired(): bool
+    {
+        $now = new DateTime();
+        return ($now >= $this->expired);
     }
 }

@@ -44,6 +44,18 @@ class AccessTokenRepo extends RepoBase
         return $accessToken;
     }
 
+    public function fetch(string $tokenHex): ?AccessTokenDto
+    {
+        $token =  hex2bin($tokenHex);
+        return $this->cnn->ssb()
+            ->select('userId', 'appId', 'token', 'refresh', 'userId', 'appId', 'scope', 'created', 'expired')
+            ->from(self::ACCESS_TOKEN_TABLE)->end()
+            ->where()
+                ->expect('token')->equal()->str($token)
+            ->end()
+            ->fetch(AccessTokenDto::class);
+    }
+
     private function generateToken(): string
     {
         return n100sBin() . random_bytes(4);
