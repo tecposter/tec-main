@@ -5,6 +5,7 @@ use Gap\Dto\DateTime;
 
 use Tec\User\Dto\UserDto;
 use Tec\User\Dto\IdentityDto;
+use Tec\User\Dto\AccessTokenDto;
 
 use Tec\User\Repo\AppRepo;
 use Tec\User\Repo\IdentityRepo;
@@ -17,7 +18,7 @@ use Tec\User\Repo\AccessTokenRepo;
 
 class IdentityService extends ServiceBase
 {
-    public function access(int $userId): ?AccessToken
+    public function access(int $userId): ?AccessTokenDto
     {
         /*
         $idToken = $this->strToToken($idTokenStr);
@@ -85,5 +86,10 @@ class IdentityService extends ServiceBase
     private function getIdentityRepo(): IdentityRepo
     {
         return new IdentityRepo($this->getDmg());
+    }
+
+    private function getTtl(): \DateInterval
+    {
+        return new \DateInterval('P1D');
     }
 }

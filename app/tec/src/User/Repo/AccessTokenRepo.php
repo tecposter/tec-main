@@ -2,6 +2,7 @@
 namespace Tec\User\Repo;
 
 use Tec\User\Dto\AccessTokenDto;
+use Gap\Dto\DateTime;
 
 class AccessTokenRepo extends RepoBase
 {
@@ -19,8 +20,8 @@ class AccessTokenRepo extends RepoBase
         $table = self::ACCESS_TOKEN_TABLE;
 
         $accessToken = new AccessTokenDto([
-            'token' => $this->createToken(),
-            'refresh' => $this->createRefresh(),
+            'token' => $this->generateToken(),
+            'refresh' => $this->generateRefresh(),
             'scope' => '',
             'created' => new DateTime(),
             'expired' => (new DateTime())->add($ttl)
@@ -28,10 +29,10 @@ class AccessTokenRepo extends RepoBase
 
         $this->cnn->isb()
             ->insert($table)
-            ->field('token', 'refresh', 'userId', 'appId', 'scrope', 'created', 'expired')
+            ->field('token', 'refresh', 'userId', 'appId', 'scope', 'created', 'expired')
             ->value()
-                ->addStr($accessToken->token)
-                ->addStr($accessToken->refresh)
+                ->addStr($accessToken->token->getBin())
+                ->addStr($accessToken->refresh->getBin())
                 ->addInt($userId)
                 ->addInt($appId)
                 ->addStr($accessToken->scope)
@@ -41,5 +42,15 @@ class AccessTokenRepo extends RepoBase
             ->execute();
 
         return $accessToken;
+    }
+
+    private function generateToken(): string
+    {
+        return n100sBin() . random_bytes(4);
+    }
+
+    private function generateRefresh(): string
+    {
+        return n100sBin() . random_bytes(4);
     }
 }

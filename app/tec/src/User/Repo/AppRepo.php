@@ -1,6 +1,8 @@
 <?php
 namespace Tec\User\Repo;
 
+use Tec\User\Dto\AppDto;
+
 class AppRepo extends RepoBase
 {
     const APP_TABLE = 'open_app';
