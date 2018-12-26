@@ -27,12 +27,14 @@ class ArticleService extends ServiceBase
         return $this->getArticleRepo()->fetchCommit($userId, $code);
     }
 
-    public function updateCommitContent(int $userId, string $code, string $content): void
+    public function saveCommitContent(int $userId, string $code, string $content): void
     {
+        $this->getArticleRepo()->saveCommitContent($userId, $code, $content);
     }
 
-    public function publish(int $userId, string $code, string $slug): void
+    public function publish(int $userId, string $code, string $slug, string $access): void
     {
+        $this->getArticleRepo()->publish($userId, $code, $slug, $access);
     }
 
     private function getArticleRepo(): ArticleRepo

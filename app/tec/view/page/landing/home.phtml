@@ -1,5 +1,38 @@
-<?php $this->layout('layout/tec'); ?>
+<?php $this->layout('layout/fullpage'); ?>
 
 <?php $this->section('main'); ?>
-<h1>TecPoster</h1>
-<?php $this->replace(); ?>
+<div class="ctn">
+    <div class="home">
+    <div class="list article-list">
+    <?php foreach ($this->articleList as $article) { ?>
+    <?php $articleOpenUrl = $this->routeUrl('article-show', ['slug' => $article->slug]); ?>
+    <?php $articleEditUrl = $this->routeUrl('article-req-updating', ['slug' => $article->slug]); ?>
+
+    <div class="item">
+        <h3 class="article-title">
+            <a href="<?php echo $articleOpenUrl; ?>">
+                <?php echo $article->getTitle(); ?>
+            </a>
+        </h3>
+        <div>
+            <div class="float-left">
+                <a class="action" href="<?php echo $articleOpenUrl; ?>">
+                    <?php echo $this->trans('open'); ?>
+                </a>
+                <a class="action" href="<?php echo $articleEditUrl; ?>">
+                    <?php echo $this->trans('edit'); ?>
+                </a>
+            </div><!-- .float-left -->
+            <div class="float-right">
+                <a class="action" href="#/u/<?php echo $article->userSlug; ?>">
+                    <?php echo $article->userFullname; ?>
+                </a>
+            </div><!-- .float-right -->
+            <div class="clearfix"></div>
+        </div>
+    </div><!-- .item -->
+    <?php } ?>
+    </div><!-- .list -->
+    </div><!-- .home -->
+</div>
+<?php $this->append(); ?>

@@ -1,16 +1,14 @@
 <?php
-namespace Tec\Article\Dto;
+namespace Tec\Landing\Dto;
 
 use Gap\Dto\DateTime;
 
-class DetailDto extends ArticleBaseDto
+class ArticleDto extends DtoBase
 {
     public $slug;
+    public $content;
     public $userSlug;
     public $userFullname;
-    public $content;
-    public $access;
-    public $status;
     public $created;
     public $changed;
 

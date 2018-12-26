@@ -6,6 +6,7 @@ use Gap\Http\RedirectResponse;
 
 use Tec\Article\Service\ArticleService;
 use Tec\Article\Dto\CommitDto;
+use Tec\Article\Enum\CommitStatus;
 
 class ArticleUi extends UiBase
 {
@@ -44,7 +45,7 @@ class ArticleUi extends UiBase
             throw new \Exception("connot find commit: $code");
         }
 
-        if ($commit->status === CommitDto::STATUS_PUBLISHED) {
+        if ($commit->status === CommitStatus::PUBLISHED) {
             throw new \Exception("This commit[$code] has already been published");
         }
 

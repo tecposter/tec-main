@@ -34,9 +34,15 @@ $collection
     ->filter('accessToken')
 
     ->postOpen(
-        '/article-update-commit',
-        'article-update-commit',
-        'Tec\Article\Open\ArticleOpen@updateCommit'
+        '/article-save-commit-content',
+        'article-save-commit-content',
+        'Tec\Article\Open\ArticleOpen@saveCommitContent'
+    )
+    
+    ->postOpen(
+        '/article-publish',
+        'article-publish',
+        'Tec\Article\Open\ArticleOpen@publish'
     );
 
 
