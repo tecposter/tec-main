@@ -25,13 +25,17 @@ class ArticleUi extends UiBase
     {
         $userId = $this->getCurrentUserId();
         $code  = (new ArticleService($this->getApp()))->reqCreating($userId);
-        $updateUrl = $this->getRouteUrlBuilder()
-            ->routeGet('article-update-commit', ['code' => $code]);
-        return new RedirectResponse($updateUrl);
+        return $this->gotoUpdateCommit($code);
     }
 
     public function reqUpdating(): RedirectResponse
     {
+        $userId = $this->getCurrentUserId();
+        $slug = $this->getParam('slug');
+
+        $commitCode = $this->getArticleService($this->getApp())->reqUpdating($userId, $slug);
+
+        return $this->gotoUpdateCommit($commitCode);
     }
 
     public function updateCommit(): Response
@@ -62,5 +66,17 @@ class ArticleUi extends UiBase
             throw new \Exception('not login');
         }
         return $userId;
+    }
+
+    private function gotoUpdateCommit(string $commitCode): RedirectResponse
+    {
+        $updateUrl = $this->getRouteUrlBuilder()
+            ->routeGet('article-update-commit', ['code' => $commitCode]);
+        return new RedirectResponse($updateUrl);
+    }
+
+    private function getArticleService(): ArticleService
+    {
+        return new ArticleService($this->getApp());
     }
 }

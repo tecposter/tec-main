@@ -46,6 +46,7 @@ class ArticleRepo extends RepoBase
                 ->leftJoin("$commitTable c")
                 ->onCond()
                     ->expect('a.articleId')->equal()->expr('c.articleId')
+                    ->andExpect('a.commitId')->equal()->expr('c.commitId')
                 ->endJoin()
                 ->leftJoin("$userTable u")
                 ->onCond()
@@ -60,31 +61,19 @@ class ArticleRepo extends RepoBase
 
     public function fetchCommit(int $userId, string $codeHex): ?CommitDto
     {
-        $articleTable = self::ARTICLE_TABLE;
-        $commitTable = self::COMMIT_TABLE;
-
         $code = hex2bin($codeHex);
-
-        return $this->cnn->ssb()
-            ->select(
-                'c.code',
-                'a.slug',
-                'c.content',
-                'c.status',
-                'c.created',
-                'c.changed'
-            )
-            ->from("{$commitTable} c")
-                ->leftJoin("$articleTable a")
-                ->onCond()
-                    ->expect('c.articleId')->equal()->expr('a.articleId')
-                ->endJoin()
-            ->end()
-            ->where()
-                ->expect('c.code')->equal()->str($code)
-                ->andExpect('c.userId')->equal()->int($userId)
-            ->end()
-            ->fetch(CommitDto::class);
+        return $this->getCommitSsb(
+            'c.code',
+            'a.slug',
+            'c.content',
+            'c.status',
+            'c.created',
+            'c.changed'
+        )->where()
+            ->expect('c.code')->equal()->str($code)
+            ->andExpect('c.userId')->equal()->int($userId)
+        ->end()
+        ->fetch(CommitDto::class);
     }
 
     public function saveCommitContent(int $userId, string $codeHex, string $inContent): void
@@ -150,6 +139,56 @@ class ArticleRepo extends RepoBase
                 ->andExpect('a.userId')->equal()->int($userId)
             ->end()
             ->execute();
+    }
+
+    public function reqUpdating(int $userId, string $inSlug): string
+    {
+        if ($userId <= 0) {
+            throw new \Exception('error userId');
+        }
+        $slug = trim($inSlug);
+        if (empty($slug)) {
+            throw new \Exception('slug cannot be empty');
+        }
+
+        $draftCommit = $this->getCommitSsb('c.code')
+            ->where()
+                ->expect('a.slug')->equal()->str($slug)
+                ->andExpect('c.status')->equal()->str(CommitStatus::DRAFT)
+            ->end()
+            ->fetchAssoc();
+        if ($draftCommit) {
+            return $draftCommit['code'];
+        }
+
+        $currentCommit = $this->getCommitSsb('a.articleId', 'c.content')
+            ->where()
+                ->expect('a.slug')->equal()->str($slug)
+                ->andExpect('a.commitId')->equal()->expr('c.commitId')
+            ->end()
+            ->fetchAssoc();
+        if (is_null($currentCommit)) {
+            throw new \Exception('cannot find slug');
+        }
+
+        $newCode = $this->randomBin();
+        $now = new DateTime();
+
+        $this->cnn->isb()
+            ->insert(self::COMMIT_TABLE)
+            ->field(...$this->getCommitFields())
+            ->value()
+                ->addInt($userId)
+                ->addInt($currentCommit['articleId'])
+                ->addStr($newCode)
+                ->addStr($currentCommit['content'])
+                ->addStr(CommitStatus::DRAFT)
+                ->addDateTime($now)
+                ->addDateTime($now)
+            ->end()
+            ->execute();
+
+        return bin2hex($newCode);
     }
 
     public function reqCreating(int $userId): string
@@ -248,6 +287,30 @@ class ArticleRepo extends RepoBase
         $articleTable = self::ARTICLE_TABLE;
         $commitTable = self::COMMIT_TABLE;
 
+        $existedArticle = $this->cnn->ssb()
+            ->select('articleId')
+            ->from($articleTable)->end()
+            ->where()
+                ->expect('slug')->equal()->str($slug)
+            ->end()
+            ->fetchAssoc();
+
+        if (empty($existedArticle)) {
+            return;
+        }
+        $commit = $this->cnn->ssb()
+            ->select('articleId')
+            ->from($commitTable)->end()
+            ->where()
+                ->expect('code')->equal()->str($commitCode)
+            ->end()
+            ->fetchAssoc();
+
+        if ($commit && $commit['articleId'] === $existedArticle['articleId']) {
+            return;
+        }
+        throw new \Exception('slug: ' . $slug . ' already exists');
+        /*
         $existed = $this->cnn->ssb()
             ->select("a.slug")
             ->from("$articleTable a")
@@ -264,6 +327,7 @@ class ArticleRepo extends RepoBase
         if ($existed) {
             throw new \Exception('slug: ' . $slug . ' already exists');
         }
+         */
     }
 
     private function assertDraftCommit(string $commitCode): void
@@ -282,5 +346,19 @@ class ArticleRepo extends RepoBase
         if ($existed['status'] !== CommitStatus::DRAFT) {
             throw new \Exception('Commit must be draft');
         }
+    }
+
+    private function getCommitSsb(string ...$fields)
+    {
+        $articleTable = self::ARTICLE_TABLE;
+        $commitTable = self::COMMIT_TABLE;
+        return $this->cnn->ssb()
+            ->select(...$fields)
+            ->from("{$commitTable} c")
+                ->leftJoin("$articleTable a")
+                ->onCond()
+                    ->expect('c.articleId')->equal()->expr('a.articleId')
+                ->endJoin()
+            ->end();
     }
 }

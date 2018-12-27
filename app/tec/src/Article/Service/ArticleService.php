@@ -20,6 +20,7 @@ class ArticleService extends ServiceBase
 
     public function reqUpdating(int $userId, string $slug): string
     {
+        return $this->getArticleRepo()->reqUpdating($userId, $slug);
     }
 
     public function fetchCommit(int $userId, string $code): ?CommitDto
