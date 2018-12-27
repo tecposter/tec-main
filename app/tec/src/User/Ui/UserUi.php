@@ -57,6 +57,10 @@ class UserUi extends UiBase
         $userService = new UserService($this->app);
 
         $user = $userService->fetchByEmail($email);
+        if (empty($user)) {
+            throw new \Exception('user not found');
+        }
+
         if (!$user->verifyPassword($password)) {
             throw new \Exception('login failed');
         }
