@@ -64,7 +64,10 @@ class IdTokenService extends ServiceBase
         $publicKey = $this->getPublicKey();
         $signer = new Sha256();
         $keychain = new Keychain();
-        return $token->verify($signer, $keychain->getPublicKey($publicKey));
+        return $token->verify(
+            $signer,
+            $keychain->getPublicKey($publicKey)->getContent()
+        );
     }
 
     private function getIssuer(): string

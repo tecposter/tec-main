@@ -33,7 +33,7 @@ class ArticleUi extends UiBase
         $userId = $this->getCurrentUserId();
         $slug = $this->getParam('slug');
 
-        $commitCode = $this->getArticleService($this->getApp())->reqUpdating($userId, $slug);
+        $commitCode = $this->getArticleService()->reqUpdating($userId, $slug);
 
         return $this->gotoUpdateCommit($commitCode);
     }

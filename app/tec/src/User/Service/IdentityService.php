@@ -44,6 +44,10 @@ class IdentityService extends ServiceBase
             throw new \Exception('userId error format: ' . $userId);
         }
         $app = $this->getAppRepo()->fetch($this->getAppKey());
+        if (is_null($app)) {
+            return null;
+        }
+
         return $this->getAccessTokenRepo()->create($userId, $app->appId, $this->getTtl());
     }
 

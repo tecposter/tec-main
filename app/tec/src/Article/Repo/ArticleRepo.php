@@ -251,7 +251,7 @@ class ArticleRepo extends RepoBase
 
     private function randomBin(): string
     {
-        $timeHex = dechex(microtime(true) * 10 ** 4);
+        $timeHex = dechex(intval(microtime(true) * 10 ** 4));
         $paded = str_pad($timeHex, 12, '0', STR_PAD_LEFT);
         return hex2bin($paded) . random_bytes(2);
     }
