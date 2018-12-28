@@ -22,10 +22,13 @@ class DetailDto extends ArticleBaseDto
 
     public function getTitle(): string
     {
+        return extract_md_title($this->content);
+        /*
         $matched = preg_match('/# ([^#\n]+)/', $this->content, $matches);
         if (!$matched) {
             return '';
         }
         return trim($matches[1]);
+         */
     }
 }

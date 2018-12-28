@@ -1,0 +1,24 @@
+<?php $this->layout('layout/fullpage'); ?>
+
+<?php $this->section('main'); ?>
+<div class="ctn draft">
+
+<h1><?php echo $this->trans('draft'); ?></h1>
+
+<div class="list article-list">
+<?php foreach ($this->draftList as $draft) { ?>
+    <div class="item">
+        <div class="article-title">
+            <a href="<?php echo $this->routeUrl('article-update-commit', ['code' => $draft->code]); ?>">
+            <?php echo $draft->getTitle(); ?>
+            </a>
+        </div>
+        <div class="prop">
+            <?php echo elapsed($draft->changed); ?>
+        </div>
+    </div>
+<?php } ?>
+</div><!-- .list -->
+
+</div><!-- .ctn -->
+<?php $this->append(); ?>

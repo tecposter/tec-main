@@ -38,7 +38,10 @@
     "autoload": {
         "psr-4": {
             "Tec\\": "app/tec/src"
-        }
+        },
+        "files": [
+            "app/tec/fun/functions.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
