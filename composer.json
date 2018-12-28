@@ -16,7 +16,7 @@
     "require-dev": {
         "gap/util": "^3.0",
         "phpunit/phpunit": "^7.0",
-        "phpstan/phpstan": "^0.9.2",
+        "phpstan/phpstan": "^0.10",
         "squizlabs/php_codesniffer": "^3.2",
         "phpmd/phpmd": "^2.6"
     },
