@@ -1,0 +1,20 @@
+<?php
+const ITEM_PER_PAGE_MAX = 100;
+
+$page = intval($this->page);
+$itemPerPage = intval($this->itemPerPage);
+$itemPerPage = $itemPerPage === 0 ? ITEM_PER_PAGE_MAX : $itemPerPage;
+$itemCount = intval($this->itemCount);
+?>
+<div class="pagination">
+<?php if ($page > 1) { ?>
+    <span class="prev">
+        <a href="?page=<?php echo ($page - 1); ?>">prev</a>
+    </span>
+<?php } ?>
+<?php if ($itemCount === $itemPerPage) { ?>
+    <span class="next">
+        <a href="?page=<?php echo ($page + 1); ?>">next</a>
+    </span>
+<?php } ?>
+</div><!-- .pagination -->

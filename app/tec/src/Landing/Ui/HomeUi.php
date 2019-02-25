@@ -5,13 +5,26 @@ use Gap\Http\Response;
 
 use Tec\Landing\Service\ArticleService;
 
+const ITEM_PER_PAGE = 10;
+
 class HomeUi extends UiBase
 {
     public function show(): Response
     {
         $articleList = $this->getArticleService()->list();
+
+        $page = $this->request->query->get('page', 1);
+        $limit = ITEM_PER_PAGE;
+        $offset = intval(($page - 1) * $limit);
+
+
+        $articleList->limit($limit);
+        $articleList->offset($offset);
+
         return $this->view('page/landing/home', [
-            'articleList' => $articleList
+            'articleList' => $articleList,
+            'page' => $page,
+            'itemPerPage' => $limit
         ]);
     }
 

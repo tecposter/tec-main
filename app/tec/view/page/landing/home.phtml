@@ -1,12 +1,19 @@
-<?php $this->layout('layout/fullpage'); ?>
+<?php
+$itemCount = 0;
+$this->layout('layout/fullpage');
+?>
 
 <?php $this->section('main'); ?>
 <div class="ctn">
     <div class="home">
     <div class="list article-list">
-    <?php foreach ($this->articleList as $article) { ?>
-    <?php $articleOpenUrl = $this->routeUrl('article-show', ['slug' => $article->slug]); ?>
-    <?php $articleEditUrl = $this->routeUrl('article-req-updating', ['slug' => $article->slug]); ?>
+
+<?php 
+foreach ($this->articleList as $article) {
+    $itemCount++;
+    $articleOpenUrl = $this->routeUrl('article-show', ['slug' => $article->slug]);
+    $articleEditUrl = $this->routeUrl('article-req-updating', ['slug' => $article->slug]);
+?>
 
     <div class="item">
         <h3 class="article-title">
@@ -14,6 +21,8 @@
                 <?php echo $article->getTitle(); ?>
             </a>
         </h3>
+
+<?php /*
         <div>
             <div class="float-left">
                 <a class="action" href="<?php echo $articleOpenUrl; ?>">
@@ -30,9 +39,20 @@
             </div><!-- .float-right -->
             <div class="clearfix"></div>
         </div>
+*/ ?>
+
     </div><!-- .item -->
-    <?php } ?>
+<?php 
+}
+?>
     </div><!-- .list -->
+
+<?php echo $this->insert('ctrl/pagination', [
+    'page' => $this->page,
+    'pagePerCount' => $this->pagePerCount,
+    'itemCount' => $itemCount
+]); ?>
+
     </div><!-- .home -->
 </div>
 <?php $this->append(); ?>
