@@ -1,6 +1,10 @@
 <?php
 $itemCount = 0;
-$this->layout('layout/fullpage');
+$this->layout('layout/fullpage', [
+    'pageConfig' => [
+        'load' => 'landing/home'
+    ]
+]);
 ?>
 
 <?php $this->section('main'); ?>
