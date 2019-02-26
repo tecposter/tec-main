@@ -40,6 +40,14 @@ class UserUi extends UiBase
             $httpOnly
         );
 
+        $response->headers->clearCookie(
+            'logined',
+            $path,
+            $domain,
+            $secure,
+            false
+        );
+
         return $response;
     }
 
@@ -81,21 +89,49 @@ class UserUi extends UiBase
         $homeUrl = $this->getRouteUrlBuilder()->routeGet('home');
         $response = new RedirectResponse($homeUrl);
 
-        $expire = 0;
+        $response->headers->setCookie($this->idTokenCookie($idToken, $ttl));
+        $response->headers->setCookie($this->loginedCookie($ttl));
+        return $response;
+    }
+
+    private function loginedCookie($ttl): Cookie
+    {
+        $now = new \DateTime();
+        $expired = $now->add($ttl)->getTimeStamp();
         $path = '/';
         $domain = '.' . $this->config->str('baseHost');
         $secure = true;
-        $httpOnly = true;
-        $response->headers->setCookie(new Cookie(
-            'idToken',
-            $idToken,
-            $expire,
+        $httpOnly = false;
+        return new Cookie(
+            'logined',
+            'true',
+            $expired,
             $path,
             $domain,
             $secure,
             $httpOnly
-        ));
-        return $response;
+        );
+    }
+
+    private function idTokenCookie($idToken, $ttl): Cookie
+    {
+        $now = new \DateTime();
+        $expired = $now->add($ttl)->getTimeStamp();
+
+        //$expire = 0;
+        $path = '/';
+        $domain = '.' . $this->config->str('baseHost');
+        $secure = true;
+        $httpOnly = true;
+        return new Cookie(
+            'idToken',
+            $idToken,
+            $expired,
+            $path,
+            $domain,
+            $secure,
+            $httpOnly
+        );
     }
 
     public function regPost(): ResponseInterface
