@@ -1,4 +1,8 @@
-<?php $this->layout('layout/fullpage'); ?>
+<?php $this->layout('layout/fullpage', [
+    'pageConfig' => [
+        'load' => 'user/article-draft'
+    ]
+]); ?>
 
 <?php $this->section('main'); ?>
 <div class="ctn draft">
