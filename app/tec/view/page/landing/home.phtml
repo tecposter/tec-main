@@ -20,11 +20,14 @@ foreach ($this->articleList as $article) {
 ?>
 
     <div class="item">
-        <h3 class="article-title">
+        <div class="article-title">
             <a href="<?php echo $articleOpenUrl; ?>">
                 <?php echo $article->getTitle(); ?>
             </a>
-        </h3>
+        </div>
+        <div class="prop">
+            <?php echo elapsed($article->changed); ?>
+        </div>
 
 <?php /*
         <div>

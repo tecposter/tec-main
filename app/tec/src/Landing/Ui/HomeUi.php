@@ -5,7 +5,7 @@ use Gap\Http\Response;
 
 use Tec\Landing\Service\ArticleService;
 
-const ITEM_PER_PAGE = 10;
+const ITEM_PER_PAGE = 20;
 
 class HomeUi extends UiBase
 {
