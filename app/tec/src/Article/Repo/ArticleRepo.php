@@ -158,7 +158,7 @@ class ArticleRepo extends RepoBase
             ->end()
             ->fetchAssoc();
         if ($draftCommit) {
-            return $draftCommit['code'];
+            return bin2hex($draftCommit['code']);
         }
 
         $currentCommit = $this->getCommitSsb('a.articleId', 'c.content')

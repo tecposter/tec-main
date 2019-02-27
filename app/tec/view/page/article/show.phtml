@@ -2,7 +2,8 @@
 $this->layout('layout/fullpage', [
     'metaTitleVars' => [$this->detail->getTitle()],
     'pageConfig' => [
-        'load' => 'article/show'
+        'load' => 'article/show',
+        'slug' => $this->detail->slug
     ]
 ]);
 ?>
