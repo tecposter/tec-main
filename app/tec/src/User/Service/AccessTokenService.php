@@ -11,6 +11,15 @@ class AccessTokenService extends ServiceBase
         return $this->getAccessTokenRepo()->fetch($token);
     }
 
+    public function refresh(AccessTokenDto $accessToken): AccessTokenDto
+    {
+        return $this->getAccessTokenRepo()->create(
+            $accessToken->userId,
+            $accessToken->appId,
+            $accessToken->getTtl()
+        );
+    }
+
     private function getAccessTokenRepo(): AccessTokenRepo
     {
         return new AccessTokenRepo($this->getDmg());

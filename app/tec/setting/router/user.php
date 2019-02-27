@@ -19,6 +19,19 @@ $collection
         '/identity-access',
         'identity-access',
         'Tec\User\Open\IdentityOpen@access'
+    )
+
+    ->site('api')
+    ->filter('accessToken')
+    ->postOpen(
+        '/refresh-access-token',
+        'refresh-access-token',
+        'Tec\User\Open\IdentityOpen@refreshAccessToken'
+    )
+    ->postOpen(
+        '/refresh-id-token',
+        'refresh-id-token',
+        'Tec\User\Open\IdentityOpen@refreshIdToken'
     );
 
 return $collection;

@@ -27,4 +27,9 @@ class AccessTokenDto extends DtoBase
         $now = new DateTime();
         return ($now >= $this->expired);
     }
+
+    public function getTtl(): \DateInterval
+    {
+        return $this->created->diff($this->expired);
+    }
 }
