@@ -1,8 +1,10 @@
 <?php
-namespace Tec\User\Ui;
+namespace Tec\Landing\Ui;
 
 use Gap\Http\Response;
-use Tec\User\Service\ArticleService;
+use Tec\Landing\Service\ArticleService;
+
+const ITEM_PER_PAGE = 20;
 
 class ArticleUi extends UiBase
 {
@@ -11,8 +13,19 @@ class ArticleUi extends UiBase
         $currentUserId = $this->getCurrentUserId();
 
         $draftList = $this->getArticleService()->listDraft($currentUserId);
-        return $this->view('page/user/article-draft', [
-            'draftList' => $draftList
+
+        $page = $this->request->query->get('page', 1);
+        $limit = ITEM_PER_PAGE;
+        $offset = intval(($page - 1) * $limit);
+
+
+        $draftList->limit($limit);
+        $draftList->offset($offset);
+
+        return $this->view('page/landing/article-draft', [
+            'draftList' => $draftList,
+            'page' => $page,
+            'itemPerPage' => $limit
         ]);
     }
 

@@ -1,14 +1,14 @@
 <?php
-namespace Tec\User\Dto;
+namespace Tec\Landing\Dto;
 
 use Gap\Dto\DateTime;
 use Gap\Dto\Bin;
 
 class DraftDto extends DtoBase
 {
-    public $slug;
     public $code;
-    public $content;
+    public $slug;
+    public $title;
     public $created;
     public $changed;
 
@@ -17,14 +17,5 @@ class DraftDto extends DtoBase
         $this->code = new Bin();
         $this->created = new DateTime();
         $this->changed = new DateTime();
-    }
-
-    public function getTitle(): string
-    {
-        $title = extract_md_title($this->content);
-        if (empty($title)) {
-            return 'New draft';
-        }
-        return $title;
     }
 }

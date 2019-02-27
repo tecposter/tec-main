@@ -1,8 +1,11 @@
-<?php $this->layout('layout/fullpage', [
+<?php
+$itemCount = 0;
+$this->layout('layout/fullpage', [
     'pageConfig' => [
-        'load' => 'user/article-draft'
+        'load' => 'landing/article-draft'
     ]
-]); ?>
+]);
+?>
 
 <?php $this->section('main'); ?>
 <div class="ctn draft">
@@ -23,6 +26,12 @@
     </div>
 <?php } ?>
 </div><!-- .list -->
+
+<?php echo $this->insert('ctrl/pagination', [
+    'page' => $this->page,
+    'pagePerCount' => $this->pagePerCount,
+    'itemCount' => $itemCount
+]); ?>
 
 </div><!-- .ctn -->
 <?php $this->append(); ?>

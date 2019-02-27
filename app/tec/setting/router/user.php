@@ -10,9 +10,6 @@ $collection
     ->post('/reg', 'reg', 'Tec\User\Ui\UserUi@regPost')
     ->get('/logout', 'logout', 'Tec\User\Ui\UserUi@logout')
 
-    ->filter('login')
-    ->get('/draft', 'draft', 'Tec\User\Ui\ArticleUi@draft')
-
     ->site('api')
     ->noFilter()
     ->postOpen(

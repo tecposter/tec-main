@@ -2,12 +2,13 @@
 namespace Tec\Landing\Repo;
 
 use Gap\Db\MySql\Collection;
-
+use Tec\Landing\Dto\DraftDto;
 use Tec\Landing\Dto\ArticleDto;
 
 class ArticleRepo extends RepoBase
 {
-    const ARTICLE_TABLE = 'tec_article_summary';
+    const ARTICLE_SUMMARY_TABLE = 'tec_article_summary';
+    const ARTICLE_DRAFT_TABLE = 'tec_article_draft';
     const ARTICLE_ACCESS_PUBLIC = 'public';
 
     public function list(): Collection
@@ -21,12 +22,30 @@ class ArticleRepo extends RepoBase
                 'created',
                 'changed'
             )
-            ->from(self::ARTICLE_TABLE)->end()
+            ->from(self::ARTICLE_SUMMARY_TABLE)->end()
             ->where()
                 ->expect('access')->equal()->str(self::ARTICLE_ACCESS_PUBLIC)
             ->end()
             ->descOrderBy('commitId')
             ->list(ArticleDto::class);
+    }
+
+    public function listDraft(int $userId): Collection
+    {
+        return $this->cnn->ssb()
+            ->select(
+                'code',
+                'slug',
+                'title',
+                'created',
+                'changed'
+            )
+            ->from(self::ARTICLE_DRAFT_TABLE)->end()
+            ->where()
+                ->expect('userId')->equal()->int($userId)
+            ->end()
+            ->descOrderBy('commitId')
+            ->list(DraftDto::class);
     }
 }
 /*

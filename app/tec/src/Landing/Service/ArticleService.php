@@ -11,6 +11,11 @@ class ArticleService extends ServiceBase
         return $this->getArticleRepo()->list();
     }
 
+    public function listDraft(int $userId): Collection
+    {
+        return $this->getArticleRepo()->listDraft($userId);
+    }
+
     private function getArticleRepo(): ArticleRepo
     {
         return new ArticleRepo($this->getDmg());
