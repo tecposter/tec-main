@@ -7,6 +7,31 @@ use Tec\Landing\Dto\ArticleDto;
 
 class ArticleRepo extends RepoBase
 {
+    const ARTICLE_TABLE = 'tec_article_summary';
+    const ARTICLE_ACCESS_PUBLIC = 'public';
+
+    public function list(): Collection
+    {
+        return $this->cnn->ssb()
+            ->select(
+                'slug',
+                'userSlug',
+                'userFullname',
+                'title',
+                'created',
+                'changed'
+            )
+            ->from(self::ARTICLE_TABLE)->end()
+            ->where()
+                ->expect('access')->equal()->str(self::ARTICLE_ACCESS_PUBLIC)
+            ->end()
+            ->descOrderBy('commitId')
+            ->list(ArticleDto::class);
+    }
+}
+/*
+class ArticleRepo extends RepoBase
+{
     const ARTICLE_TABLE = 'tec_article';
     const COMMIT_TABLE = 'tec_article_commit';
     const USER_TABLE = 'tec_user';
@@ -44,3 +69,4 @@ class ArticleRepo extends RepoBase
             ->list(ArticleDto::class);
     }
 }
+ */

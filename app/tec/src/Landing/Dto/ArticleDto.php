@@ -6,7 +6,7 @@ use Gap\Dto\DateTime;
 class ArticleDto extends DtoBase
 {
     public $slug;
-    public $content;
+    public $title;
     public $userSlug;
     public $userFullname;
     public $created;
@@ -20,10 +20,16 @@ class ArticleDto extends DtoBase
 
     public function getTitle(): string
     {
+        return $this->title;
+    }
+    /*
+    public function getTitle(): string
+    {
         $matched = preg_match('/# ([^#\n]+)/', $this->content, $matches);
         if (!$matched) {
             return '';
         }
         return trim($matches[1]);
     }
+     */
 }
