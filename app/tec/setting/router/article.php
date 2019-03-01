@@ -16,6 +16,7 @@ $collection
     ->site('www')
     ->noFilter()
     ->get('/article/{slug:[a-z0-9-]+}', 'article-show', 'Tec\Article\Ui\ArticleUi@show')
+    ->get('/markdown', 'markdown', 'Tec\Article\Ui\MarkdownUi@show')
 
     ->filter('login')
     ->get('/article-req-creating', 'article-req-creating', 'Tec\Article\Ui\ArticleUi@reqCreating')
@@ -31,20 +32,21 @@ $collection
     )
 
     ->site('api')
-    ->filter('accessToken')
-
-    ->postOpen(
-        '/article-save-commit-content',
-        'article-save-commit-content',
-        'Tec\Article\Open\ArticleOpen@saveCommitContent'
-    )
-
+    ->noFilter()
     ->postOpen(
         '/article-fetch-released-content',
         'article-fetch-released-content',
         'Tec\Article\Open\ArticleOpen@fetchReleasedContent'
     )
     
+
+    ->site('api')
+    ->filter('accessToken')
+    ->postOpen(
+        '/article-save-commit-content',
+        'article-save-commit-content',
+        'Tec\Article\Open\ArticleOpen@saveCommitContent'
+    )
     ->postOpen(
         '/article-publish',
         'article-publish',
