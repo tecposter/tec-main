@@ -21,6 +21,21 @@ class ArticleOpen extends OpenBase
         ]);
     }
 
+    public function fetchReleasedContent(): JsonResponse
+    {
+        $slug = $this->request->request->get('slug');
+        if (empty($slug)) {
+            throw new \Exception('slug cannot be empty');
+        }
+        $detail = $this->getArticleService()->fetchDetail($slug);
+        if (!$detail) {
+            throw new \Exception('cannot fetch article');
+        }
+        return new JsonResponse([
+            'content' => $detail->content
+        ]);
+    }
+
     public function publish(): JsonResponse
     {
         $userId = $this->getUserId();

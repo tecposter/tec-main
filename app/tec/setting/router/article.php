@@ -38,6 +38,12 @@ $collection
         'article-save-commit-content',
         'Tec\Article\Open\ArticleOpen@saveCommitContent'
     )
+
+    ->postOpen(
+        '/article-fetch-released-content',
+        'article-fetch-released-content',
+        'Tec\Article\Open\ArticleOpen@fetchReleasedContent'
+    )
     
     ->postOpen(
         '/article-publish',

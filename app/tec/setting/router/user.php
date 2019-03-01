@@ -17,6 +17,11 @@ $collection
         'identity-access',
         'Tec\User\Open\IdentityOpen@access'
     )
+    ->postOpen(
+        '/refresh-id-token',
+        'refresh-id-token',
+        'Tec\User\Open\IdentityOpen@refreshIdToken'
+    )
 
     ->site('api')
     ->filter('accessToken')
@@ -24,11 +29,5 @@ $collection
         '/refresh-access-token',
         'refresh-access-token',
         'Tec\User\Open\IdentityOpen@refreshAccessToken'
-    )
-    ->postOpen(
-        '/refresh-id-token',
-        'refresh-id-token',
-        'Tec\User\Open\IdentityOpen@refreshIdToken'
     );
-
 return $collection;
