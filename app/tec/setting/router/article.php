@@ -30,6 +30,11 @@ $collection
         'article-update-commit',
         'Tec\Article\Ui\ArticleUi@updateCommit'
     )
+    ->get(
+        '/article-delete-draft/{slug:[a-z0-9-]+}',
+        'article-delete-draft',
+        'Tec\Article\Ui\ArticleUi@deleteDraft'
+    )
 
     ->site('api')
     ->noFilter()

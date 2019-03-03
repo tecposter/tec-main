@@ -23,6 +23,16 @@ class ArticleService extends ServiceBase
         return $this->getArticleRepo()->reqUpdating($userId, $slug);
     }
 
+    public function deleteDraft(int $userId, string $slug): void
+    {
+        $this->getArticleRepo()->deleteDraft($userId, $slug);
+    }
+
+    public function hasSlug(string $slug): bool
+    {
+        return $this->getArticleRepo()->hasSlug($slug);
+    }
+
     public function fetchCommit(int $userId, string $code): ?CommitDto
     {
         return $this->getArticleRepo()->fetchCommit($userId, $code);

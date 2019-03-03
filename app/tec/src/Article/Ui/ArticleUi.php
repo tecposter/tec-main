@@ -38,6 +38,23 @@ class ArticleUi extends UiBase
         return $this->gotoUpdateCommit($commitCode);
     }
 
+    public function deleteDraft(): RedirectResponse
+    {
+        $userId = $this->getCurrentUserId();
+        $slug = $this->getParam('slug');
+
+        $articleService = $this->getArticleService();
+        $articleService->deleteDraft($userId, $slug);
+        if ($articleService->hasSlug($slug)) {
+            $articleUrl = $this->getRouteUrlBuilder()
+                ->routeGet('article-show', ['slug' => $slug]);
+            return new RedirectResponse($articleUrl);
+        }
+
+        $homeUrl = $this->getRouteUrlBuilder()->routeGet('home');
+        return new RedirectResponse($homeUrl);
+    }
+
     public function updateCommit(): Response
     {
         $currentUserId = $this->getCurrentUserId();

@@ -18,7 +18,7 @@ class ArticleRepo extends RepoBase
     const USER_TABLE = 'tec_user';
 
     //const ARTICLE_STATUS_DEFAULT = 'normal';
-    //const COMMIT_STATUS_DEFAULT = 'draft';
+    const COMMIT_STATUS_DRAFT = 'draft';
     //const ACCESS_DEFAULT = 'private';
 
     public function fetchDetail(string $slug): ?DetailDto
@@ -139,6 +139,66 @@ class ArticleRepo extends RepoBase
                 ->andExpect('a.userId')->equal()->int($userId)
             ->end()
             ->execute();
+    }
+
+    public function deleteDraft(int $userId, string $inSlug): void
+    {
+        if ($userId <= 0) {
+            throw new \Exception('error userId');
+        }
+        $slug = trim($inSlug);
+        if (empty($slug)) {
+            throw new \Exception('slug cannot be empty');
+        }
+        $trans = $this->cnn->trans();
+        $trans->begin();
+        try {
+            $this->cnn->dsb()
+                ->delete('c')
+                ->from(self::COMMIT_TABLE . ' c')
+                    ->leftJoin(self::ARTICLE_TABLE . ' a')
+                    ->onCond()
+                        ->expect('c.articleId')->equal()->expr('a.articleId')
+                    ->endJoin()
+                ->end()
+                ->where()
+                    ->expect('a.slug')->equal()->str($slug)
+                    ->andExpect('c.status')->equal()->str(self::COMMIT_STATUS_DRAFT)
+                ->end()
+                ->execute();
+            $this->cnn->dsb()
+                ->delete(self::ARTICLE_TABLE)
+                ->from(self::ARTICLE_TABLE)->end()
+                ->where()
+                    ->expect('slug')->equal()->str($slug)
+                    ->andExpect('commitId')->equal()->int(0)
+                ->end()
+                ->execute();
+        } catch (\Exception $e) {
+            $trans->rollback();
+            throw $e;
+        }
+        $trans->commit();
+    }
+
+    public function hasSlug(string $inSlug): bool
+    {
+        $slug = trim($inSlug);
+        if (empty($slug)) {
+            throw new \Exception('slug cannot be empty');
+        }
+        $existedArticle = $this->cnn->ssb()
+            ->select('articleId')
+            ->from(self::ARTICLE_TABLE)->end()
+            ->where()
+                ->expect('slug')->equal()->str($slug)
+            ->end()
+            ->fetchAssoc();
+
+        if (empty($existedArticle)) {
+            return false;
+        }
+        return true;
     }
 
     public function reqUpdating(int $userId, string $inSlug): string

@@ -18,4 +18,13 @@ class DraftDto extends DtoBase
         $this->created = new DateTime();
         $this->changed = new DateTime();
     }
+
+    public function getTitle(): string
+    {
+        if ($this->title) {
+            return $this->title;
+        }
+
+        return 'null';
+    }
 }
