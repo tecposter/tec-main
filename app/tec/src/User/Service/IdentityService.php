@@ -18,7 +18,7 @@ use Tec\User\Repo\AccessTokenRepo;
 
 class IdentityService extends ServiceBase
 {
-    public function access(int $userId): ?AccessTokenDto
+    public function access(int $userId): AccessTokenDto
     {
         /*
         $idToken = $this->strToToken($idTokenStr);
@@ -45,7 +45,7 @@ class IdentityService extends ServiceBase
         }
         $app = $this->getAppRepo()->fetch($this->getAppKey());
         if (is_null($app)) {
-            return null;
+            throw new \Exception('Cannot find oauth app');
         }
 
         return $this->getAccessTokenRepo()->create($userId, $app->appId, $this->getTtl());
@@ -74,7 +74,11 @@ class IdentityService extends ServiceBase
 
     private function getAppKey(): string
     {
-        return $this->app->getConfig()->config('open')->str('appKey');
+        $appKey = $this->app->getConfig()->config('open')->str('appKey');
+        if (!$appKey) {
+            throw new \Exception('appKey cannot be empty');
+        }
+        return $appKey;
     }
 
     private function getAppRepo(): AppRepo
